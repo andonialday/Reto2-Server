@@ -1,25 +1,25 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Para cambiar este encabezado de licencia, elija Encabezados de licencia en Propiedades del proyecto.
+ * Para cambiar este archivo de plantilla, elija Herramientas | Plantillas
+ * y abra la plantilla en el editor.
  */
 package entities;
 
 import java.io.Serializable;
 
 /**
- * Privilege enumeration for the user, with the possbile values ofthe field
- * @author Andoni Alday
+ * La enumeración de los privilegios para el usuario, con los posibles valores del campo
+ * @author Jaime San Sebastián y Enaitz Izaguirre
  */
 public enum Privilege implements Serializable{
 
     /**
-     * Enumeration option 0, the user has Admin privileges
+     * Si la opción de enumeración es 0, el usuario tiene los privilegio del administrador
      */
     ADMIN,
 
     /**
-     * Enumeration option 1, the user has User privileges
+     * Si la opción de enumeración es 1, el usuario tiene los privilegio de usuario
      */
     USER,
 }

@@ -1,35 +1,35 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Para cambiar este encabezado de licencia, elija Encabezados de licencia en Propiedades del proyecto.
+ * Para cambiar este archivo de plantilla, elija Herramientas | Plantillas
+ * y abra la plantilla en el editor.
  */
 package entities;
 
 import java.io.Serializable;
 
 /**
- * Enumeracion Type para el User Client, indicando su tipo
+ * El tipo de enumeración para el cliente, indicando su tipo
  * @author Jaime San Sebastian
  */
 public enum Type implements Serializable{
 
     /**
-     * Opcion 0 de la enumeracion, el Client es un particular
+     * Si la opción de enumeración es 0, el cliente es un particular
      */
     PARTICULAR,
 
     /**
-     * Opcion 1 de la enumeracion, el Client es una asociacion
+     * Si la opción de enumeración es 1, el cliente es una asociación
      */
     ASOCIATION,
     
     /**
-     * Opcion 2 de la enumeracion, el Client es una empresa
+     * Si la opción de enumeración es 2, el cliente es una empresa
      */
     ENTERPRISE,
     
     /**
-     * Opcion 3 de la enumeracion, el Client es un ente público
+     * Si la opción de enumeración es 3, el cliente es un ente público
      */
     PUBLIC_ENTITY;
 }

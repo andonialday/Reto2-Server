@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Para cambiar este encabezado de licencia, elija Encabezados de licencia en Propiedades del proyecto.
+ * Para cambiar este archivo de plantilla, elija Herramientas | Plantillas
+ * y abra la plantilla en el editor.
  */
 package entities;
 
@@ -16,11 +16,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- *
+ * Clase con los parámetros para la creación de clientes
  * @author Jaime San Sebastián
  */
 @Entity
-@Table(name = "CLIENT")
+@Table(name = "CLIENT", schema="reto2g1c")
 public class Client extends User{
     
     @Enumerated(EnumType.STRING)
@@ -32,26 +32,50 @@ public class Client extends User{
     @ManyToOne
     private Commercial comercial;
 
+    /**
+     *
+     * @return el tipo de un cliente
+     */
     public Type getType() {
         return type;
     }
 
+    /**
+     *
+     * @param type el tipo de un cliente a establecer
+     */
     public void setType(Type type) {
         this.type = type;
     }
 
+    /**
+     *
+     * @return los eventos de un cliente
+     */
     public Set<Event> getEvents() {
         return events;
     }
 
+    /**
+     *
+     * @param events los eventos de un cliente a establecer
+     */
     public void setEvents(Set<Event> events) {
         this.events = events;
     }
 
+    /**
+     *
+     * @return el comercial de un cliente
+     */
     public Commercial getComercial() {
         return comercial;
     }
 
+    /**
+     *
+     * @param comercial el comercial de un cliente a establecer
+     */
     public void setComercial(Commercial comercial) {
         this.comercial = comercial;
     }

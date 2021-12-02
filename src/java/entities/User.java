@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Para cambiar este encabezado de licencia, elija Encabezados de licencia en Propiedades del proyecto.
+ * Para cambiar este archivo de plantilla, elija Herramientas | Plantillas
+ * y abra la plantilla en el editor.
  */
 package entities;
 
@@ -21,135 +21,139 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * Class with the Paremeters for User Creation
- * @author Andoni Alday
+ * Clase con los parámetros para la creación de usuarios
+ * @author Jaime San Sebastián y Enaitz Izaguirre
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "USER")
+@Table(name = "USER", schema="reto2g1c")
 public class User implements Serializable {
 
     @Id
     @GeneratedValue
     private Integer id;
+    
     private String login;
     private String email;
     private String fullName;
+    
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+    
     @Enumerated(EnumType.STRING)
     private Privilege privilege;
     private String password;
+    
     @Temporal (TemporalType.TIMESTAMP)
     private Timestamp lastPasswordChange;
 
     /**
-     * @return the id
+     * @return el id de un usuario
      */
     public int getId() {
         return id;
     }
 
     /**
-     * @param id the id to set
+     * @param id el id de un usuario a establecer
      */
     public void setId(int id) {
         this.id = id;
     }
 
     /**
-     * @return the login
+     * @return el login de un usuario
      */
     public String getLogin() {
         return login;
     }
 
     /**
-     * @param login the login to set
+     * @param login el login de un usuario a establecer
      */
     public void setLogin(String login) {
         this.login = login;
     }
 
     /**
-     * @return the email
+     * @return el email de un usuario
      */
     public String getEmail() {
         return email;
     }
 
     /**
-     * @param email the email to set
+     * @param email el email de un usuario a establecer
      */
     public void setEmail(String email) {
         this.email = email;
     }
 
     /**
-     * @return the fullName
+     * @return el nombre completo de un usuario
      */
     public String getFullName() {
         return fullName;
     }
 
     /**
-     * @param fullName the fullName to set
+     * @param fullName el nombre completo de un usuario a establecer
      */
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
     /**
-     * @return the status
+     * @return el estado de un usuario
      */
     public UserStatus getStatus() {
         return status;
     }
 
     /**
-     * @param status the status to set
+     * @param status el estado de un cliente a establecer
      */
     public void setStatus(UserStatus status) {
         this.status = status;
     }
 
     /**
-     * @return the privilege
+     * @return el privilegio de un usuario
      */
     public Privilege getPrivilege() {
         return privilege;
     }
 
     /**
-     * @param privilege the privilege to set
+     * @param privilege el privilegio de un usuario a establecer
      */
     public void setPrivilege(Privilege privilege) {
         this.privilege = privilege;
     }
 
     /**
-     * @return the password
+     * @return la contraseña de un usuario
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * @param password the password to set
+     * @param password la contraseña de un usuario a establecer
      */
     public void setPassword(String password) {
         this.password = password;
     }
 
     /**
-     * @return the lastPasswordChange
+     * @return el cambio de contraseña de un usuario
      */
     public Timestamp getLastPasswordChange() {
         return lastPasswordChange;
     }
 
     /**
-     * @param lastPasswordChange the lastPasswordChange to set
+     * @param lastPasswordChange el cambio de contraseña de un usuario a establecer
      */
     public void setLastPasswordChange(Timestamp lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
@@ -212,9 +216,6 @@ public class User implements Serializable {
         }
         return true;
     }
-
-    
-    
     
 }
 
