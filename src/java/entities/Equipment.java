@@ -35,7 +35,7 @@ public class Equipment implements Serializable {
     private Timestamp dateAdd;
     private Double cost;
     @OneToMany(cascade = ALL , mappedBy = "equipment")
-  //  private Set<EventEquipment> events;
+    private Set<EventEquipment> events;
     
 
     public Integer getId() {
@@ -70,18 +70,18 @@ public class Equipment implements Serializable {
         this.cost = cost;
     }
 
-  /*  public Set<EventEquipment> getEvents() {
+    public Set<EventEquipment> getEvents() {
         return events;
     }
 
     public void setEvents(Set<EventEquipment> events) {
         this.events = events;
-    }*/
+    }
 
     @Override
     public String toString() {
         return "Equipment{" + "id=" + id + ", description=" + description + ", dateAdd=" + dateAdd + ", cost=" + cost +
-                /*", events=" + events +*/ '}';
+               ", events=" + events + '}';
     }
 
     @Override
@@ -91,7 +91,7 @@ public class Equipment implements Serializable {
         hash = 67 * hash + Objects.hashCode(this.description);
         hash = 67 * hash + Objects.hashCode(this.dateAdd);
         hash = 67 * hash + Objects.hashCode(this.cost);
-      //  hash = 67 * hash + Objects.hashCode(this.events);
+        hash = 67 * hash + Objects.hashCode(this.events);
         return hash;
     }
 
@@ -119,9 +119,9 @@ public class Equipment implements Serializable {
         if (!Objects.equals(this.cost, other.cost)) {
             return false;
         }
-    /*    if (!Objects.equals(this.events, other.events)) {
+        if (!Objects.equals(this.events, other.events)) {
             return false;
-        }*/
+        }
         return true;
     }
    
