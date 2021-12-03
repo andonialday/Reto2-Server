@@ -21,33 +21,36 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * Clase con los parámetros para la creación de usuarios
+ * Clase con los parámetros para la creación y gestión de usuarios
+ *
  * @author Jaime San Sebastián y Enaitz Izaguirre
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "USER", schema="reto2g1c")
+@Table(name = "USER", schema = "reto2g1c")
 public class User implements Serializable {
 
     @Id
     @GeneratedValue
     private Integer id;
-    
+
     private String login;
     private String email;
     private String fullName;
-    
+
     @Enumerated(EnumType.STRING)
     private UserStatus status;
-    
+
     @Enumerated(EnumType.STRING)
     private Privilege privilege;
     private String password;
-    
-    @Temporal (TemporalType.TIMESTAMP)
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Timestamp lastPasswordChange;
 
     /**
+     * Método Getter para obtener la ID del usuario
+     *
      * @return el id de un usuario
      */
     public int getId() {
@@ -55,6 +58,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Setter para asignar una ID al usuario
+     *
      * @param id el id de un usuario a establecer
      */
     public void setId(int id) {
@@ -62,6 +67,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Getter para obtener el login del usuario
+     *
      * @return el login de un usuario
      */
     public String getLogin() {
@@ -69,6 +76,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Setter para asignar un login al usuario
+     *
      * @param login el login de un usuario a establecer
      */
     public void setLogin(String login) {
@@ -76,6 +85,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Métogo Getter para obtener el email del usuario
+     *
      * @return el email de un usuario
      */
     public String getEmail() {
@@ -83,6 +94,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Setter para asignar el email al usuario
+     *
      * @param email el email de un usuario a establecer
      */
     public void setEmail(String email) {
@@ -90,6 +103,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Getter para obtener el Nombre Completo del usuario
+     *
      * @return el nombre completo de un usuario
      */
     public String getFullName() {
@@ -97,6 +112,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Setter para asignar el Nombre Completo al usuario
+     *
      * @param fullName el nombre completo de un usuario a establecer
      */
     public void setFullName(String fullName) {
@@ -104,20 +121,26 @@ public class User implements Serializable {
     }
 
     /**
-     * @return el estado de un usuario
+     * Método Getter para obtener el estado de la cuenta del usuario
+     *
+     * @return el estado de la cuente de un usuario
      */
     public UserStatus getStatus() {
         return status;
     }
 
     /**
-     * @param status el estado de un cliente a establecer
+     * Método Setter para determinar el estado de la cuenta del usuario
+     *
+     * @param status el estado de la cuenta del usuario
      */
     public void setStatus(UserStatus status) {
         this.status = status;
     }
 
     /**
+     * Método Getter para obtener el nivel de privilegio del usuario
+     *
      * @return el privilegio de un usuario
      */
     public Privilege getPrivilege() {
@@ -125,6 +148,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Setter para asignar el nivel de privilegio al usuario
+     *
      * @param privilege el privilegio de un usuario a establecer
      */
     public void setPrivilege(Privilege privilege) {
@@ -132,6 +157,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Getter para obtener la contraseña del usuario
+     *
      * @return la contraseña de un usuario
      */
     public String getPassword() {
@@ -139,6 +166,8 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Setter para asignar una contraseña al usuario
+     *
      * @param password la contraseña de un usuario a establecer
      */
     public void setPassword(String password) {
@@ -146,6 +175,9 @@ public class User implements Serializable {
     }
 
     /**
+     * Método Getter para obtener el momento del último cambio de contraseña del
+     * usuario
+     *
      * @return el cambio de contraseña de un usuario
      */
     public Timestamp getLastPasswordChange() {
@@ -153,7 +185,11 @@ public class User implements Serializable {
     }
 
     /**
-     * @param lastPasswordChange el cambio de contraseña de un usuario a establecer
+     * Método Getter para obtener el momento del último cambio de contraseña del
+     * usuario
+     *
+     * @param lastPasswordChange el cambio de contraseña de un usuario a
+     * establecer
      */
     public void setLastPasswordChange(Timestamp lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
@@ -216,6 +252,5 @@ public class User implements Serializable {
         }
         return true;
     }
-    
-}
 
+}

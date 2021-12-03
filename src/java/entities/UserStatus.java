@@ -8,18 +8,19 @@ package entities;
 import java.io.Serializable;
 
 /**
- * La enumeración del estado para el usuario, con los posibles valores del campo
+ * La enumeración del estado de la cuenta del usuario, con los posibles valores
+ * del campo
+ *
  * @author Jaime San Sebastián y Enaitz Izaguirre
  */
-public enum UserStatus implements Serializable{
+public enum UserStatus implements Serializable {
 
     /**
-     * Si la opción de enumeración es 0, el usuario está habilitado
+     * Opción 0 de enumeración, el usuario está habilitado
      */
     ENABLED,
-
     /**
-     * Si la opción de enumeración es 1, el usuario está deshabilitado
+     * Opción 1 de enumeración, el usuario está deshabilitado
      */
     DISABLED;
 }

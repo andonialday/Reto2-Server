@@ -16,23 +16,25 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Clase con los parámetros para la creación de clientes
+ * Clase con los parámetros para la creación y gestión de clientes
+ *
  * @author Jaime San Sebastián
  */
 @Entity
-@Table(name = "CLIENT", schema="reto2g1c")
-public class Client extends User{
-    
+@Table(name = "CLIENT", schema = "reto2g1c")
+public class Client extends User {
+
     @Enumerated(EnumType.STRING)
-    private Type type; 
-    
-    @OneToMany(cascade = ALL , mappedBy = "client")
+    private Type type;
+
+    @OneToMany(cascade = ALL, mappedBy = "client")
     private Set<Event> events;
-    
+
     @ManyToOne
     private Commercial comercial;
 
     /**
+     * Método Getter para obtener el tipo de un cliente
      *
      * @return el tipo de un cliente
      */
@@ -41,6 +43,7 @@ public class Client extends User{
     }
 
     /**
+     * Método Setter para asignar el tipo a un cliente
      *
      * @param type el tipo de un cliente a establecer
      */
@@ -49,6 +52,7 @@ public class Client extends User{
     }
 
     /**
+     * Método Getter para obtener los eventos del cliente
      *
      * @return los eventos de un cliente
      */
@@ -57,6 +61,7 @@ public class Client extends User{
     }
 
     /**
+     * Método Setter para asignar eventos a un cliente
      *
      * @param events los eventos de un cliente a establecer
      */
@@ -65,6 +70,7 @@ public class Client extends User{
     }
 
     /**
+     * Método Geter para obtener el Comercial asignado a un cliente
      *
      * @return el comercial de un cliente
      */
@@ -73,6 +79,7 @@ public class Client extends User{
     }
 
     /**
+     * Método Setter para asignar un Comercial al cliente
      *
      * @param comercial el comercial de un cliente a establecer
      */
@@ -117,5 +124,5 @@ public class Client extends User{
         }
         return true;
     }
-    
+
 }
