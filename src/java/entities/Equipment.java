@@ -87,7 +87,7 @@ public class Equipment implements Serializable {
 
     /**
      * Metodo Getter para obtener el Cost <i>(Coste)</i> del Equipamiento
-     * @return el Cost<i>(Coste)</i> del Equipamiento
+     * @return Cost<i>(Coste)</i> del Equipamiento
      */
     public Double getCost() {
         return cost;
@@ -95,7 +95,7 @@ public class Equipment implements Serializable {
 
     /**
      * Metodo Setter para definir el Cost <i>(Coste)</i> del Equipamiento
-     * @param cost el Cost<i>(Coste)</i> a asignar al Equipamiento
+     * @param cost <i>(Coste)</i> a asignar al Equipamiento
      */
     public void setCost(Double cost) {
         this.cost = cost;
@@ -103,7 +103,7 @@ public class Equipment implements Serializable {
 
     /**
      * Metodo Getter para obtener los Event <i>(Eventos)</i> asignados al Equipamiento
-     * @return los Event <i>(Eventos)</i> del Equipamiento
+     * @return Events <i>(Eventos)</i> del Equipamiento
      */
     public Set<EventEquipment> getEvents() {
         return events;
