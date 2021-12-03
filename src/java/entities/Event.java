@@ -105,7 +105,7 @@ public class Event implements Serializable {
     
     /**
      * Método Getter para obtener el Client <i>(Client)</i> "propietario" del Event
-     * @return client Client<i>(Cliente)</i> "propietario" del Event
+     * @return Client<i>(Cliente)</i> "propietario" del Event
      */
     public Client getClient() {
         return client;
@@ -121,7 +121,7 @@ public class Event implements Serializable {
      
     /**
      * Método Getter para obtener los Equipments <i>(Equipamientos empleados)</i> del Event
-     * @return eEquipments <i>(Equipamientos empleados)</i> del Event
+     * @return Equipments <i>(Equipamientos empleados)</i> del Event
      */
     public Set<EventEquipment> getEquipments() {
         return equipments;

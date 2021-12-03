@@ -40,16 +40,16 @@ public class EventEquipment implements Serializable {
     /**
      * Método Getter para obtener la ID combinada de Event y Equipment
      *
-     * @return eventEquipmentId
+     * @return eventEquipmentId ID combinada de Event y Equipment
      */
     public EventEquipmentId getEventEquipmentId() {
         return eventEquipmentId;
     }
 
     /**
-     * Método Setter para obtener la ID combinada de Event y Equipment
+     * Método Setter para asignar una ID combinada de Event y Equipment
      *
-     * @param eventEquipmentId
+     * @param eventEquipmentId ID combinada de Event y Equipment
      */
     public void setEventEquipmentId(EventEquipmentId eventEquipmentId) {
         this.eventEquipmentId = eventEquipmentId;
