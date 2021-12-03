@@ -14,6 +14,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Clase con los parámetros para la creación y gestión de clientes
@@ -22,6 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "CLIENT", schema = "reto2g1c")
+@XmlRootElement
 public class Client extends User {
 
     @Enumerated(EnumType.STRING)
@@ -56,6 +59,7 @@ public class Client extends User {
      *
      * @return los eventos de un cliente
      */
+    @XmlTransient
     public Set<Event> getEvents() {
         return events;
     }

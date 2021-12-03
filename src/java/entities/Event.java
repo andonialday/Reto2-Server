@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
 import static javax.persistence.CascadeType.ALL;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entidad Event para la gestion de eventos
@@ -19,6 +21,7 @@ import static javax.persistence.CascadeType.ALL;
  */
 @Entity
 @Table(name = "EVENT", schema="reto2g1c")
+@XmlRootElement
 public class Event implements Serializable {
 
     @Id
@@ -123,6 +126,7 @@ public class Event implements Serializable {
      * Método Getter para obtener los Equipments <i>(Equipamientos empleados)</i> del Event
      * @return Equipments <i>(Equipamientos empleados)</i> del Event
      */
+    @XmlTransient
     public Set<EventEquipment> getEquipments() {
         return equipments;
     }

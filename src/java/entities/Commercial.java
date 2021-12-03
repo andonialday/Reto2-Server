@@ -13,6 +13,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Esta clase es un tipo de Usuario que extiende de User
@@ -20,6 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "COMMERCIAL", schema="reto2g1c")
+@XmlRootElement
 public class Commercial extends User implements Serializable{
     
     //La especializacion del Comercial se implementa mediante las opciones de la clase Especialization
@@ -42,6 +45,7 @@ public class Commercial extends User implements Serializable{
      * Metodo`para obtener el Listado de clientes
      * @return Devuelve el array de clientes
      */
+    @XmlTransient
     public List<Client> getClients() {
         return clients;
     }

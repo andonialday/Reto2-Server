@@ -18,6 +18,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Clase con los parámetros para la creación y gestión de usuarios
@@ -27,6 +28,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "USER", schema = "reto2g1c")
+@XmlRootElement
 public class User implements Serializable {
 
     @Id

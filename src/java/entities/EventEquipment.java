@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entidad EventEquipment, representativa de la relacion entre os Event y los
@@ -22,6 +23,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "EVENTEQUIPMENT", schema = "reto2g1c")
+@XmlRootElement
 public class EventEquipment implements Serializable {
 
     @EmbeddedId

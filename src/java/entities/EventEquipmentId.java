@@ -49,4 +49,5 @@ public class EventEquipmentId implements Serializable{
     public void setEquipmentId(Integer equipmentId) {
         this.equipmentId = equipmentId;
     }
+
 }
