@@ -7,7 +7,7 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
@@ -31,8 +31,8 @@ public class Equipment implements Serializable {
     @GeneratedValue
     private Integer id;
     private String description;
-    @Temporal (TemporalType.TIMESTAMP)
-    private Timestamp dateAdd;
+    @Temporal (TemporalType.DATE)
+    private Date dateAdd;
     private Double cost;
     @OneToMany(cascade = ALL , mappedBy = "equipment")
     private Set<EventEquipment> events;
@@ -73,7 +73,7 @@ public class Equipment implements Serializable {
      * Metodo Getter para obtener la DateAdd <i>(Fecha de alta)</i> del Equipamiento
      * @return DateAdd <i>(Fecha de alta)</i> del Equipamiento
      */
-    public Timestamp getDateAdd() {
+    public Date getDateAdd() {
         return dateAdd;
     }
 
@@ -81,7 +81,7 @@ public class Equipment implements Serializable {
      * Metodo Setter para definir el DateAdd <i>(Fecha de alta)</i> del Equipamiento
      * @param dateAdd <i>(Fecha de alta)</i> a asignar al Equipamiento
      */
-    public void setDateAdd(Timestamp dateAdd) {
+    public void setDateAdd(Date dateAdd) {
         this.dateAdd = dateAdd;
     }
 

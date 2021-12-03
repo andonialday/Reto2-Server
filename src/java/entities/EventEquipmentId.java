@@ -15,14 +15,14 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class EventEquipmentId implements Serializable{
     
-    private Event eventId;
-    private Equipment equipmentId;
+    private Integer eventId;
+    private Integer equipmentId;
 
     /**
      * Método Getter de la ID del Event de la relación EventEquipment
      * @return eventId ID del Event de la relación EventEquipment
      */
-    public Event getEventId() {
+    public Integer getEventId() {
         return eventId;
     }
 
@@ -30,7 +30,7 @@ public class EventEquipmentId implements Serializable{
      * Método Setter para asignar un Event a la relación EventEquipment
      * @param eventId ID del Event a asignar a la relación EventEquipment
      */
-    public void setEvenId(Event eventId) {
+    public void setEvenId(Integer eventId) {
         this.eventId = eventId;
     }
 
@@ -38,7 +38,7 @@ public class EventEquipmentId implements Serializable{
      * Método Getter de la ID del Equipment de la relación EventEquipment
      * @return equipmentId ID del Equipment de la relación EventEquipment
      */
-    public Equipment getEquipmentId() {
+    public Integer getEquipmentId() {
         return equipmentId;
     }
 
@@ -46,7 +46,7 @@ public class EventEquipmentId implements Serializable{
      * Método Setter para asignar un Equipment a la relación EventEquipment
      * @param equipmentId ID del Equipment a asignar a la relación EventEquipment
      */
-    public void setEquipmentId(Equipment equipmentId) {
+    public void setEquipmentId(Integer equipmentId) {
         this.equipmentId = equipmentId;
     }
 }

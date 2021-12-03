@@ -6,9 +6,8 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -45,8 +44,8 @@ public class User implements Serializable {
     private Privilege privilege;
     private String password;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp lastPasswordChange;
+    @Temporal(TemporalType.DATE)
+    private Date lastPasswordChange;
 
     /**
      * Método Getter para obtener la ID del usuario
@@ -180,7 +179,7 @@ public class User implements Serializable {
      *
      * @return el cambio de contraseña de un usuario
      */
-    public Timestamp getLastPasswordChange() {
+    public Date getLastPasswordChange() {
         return lastPasswordChange;
     }
 
@@ -191,7 +190,7 @@ public class User implements Serializable {
      * @param lastPasswordChange el cambio de contraseña de un usuario a
      * establecer
      */
-    public void setLastPasswordChange(Timestamp lastPasswordChange) {
+    public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 

@@ -6,7 +6,7 @@
 package entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
@@ -25,11 +25,11 @@ public class Event implements Serializable {
     @GeneratedValue
     private Integer id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp dateStart;
+    @Temporal(TemporalType.DATE)
+    private Date dateStart;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp dateEnd;
+    @Temporal(TemporalType.DATE)
+    private Date dateEnd;
 
     private String description;
 
@@ -59,7 +59,7 @@ public class Event implements Serializable {
      * Método Getter para obtener la DateStart <i>(Fecha de Inicio)</i> del Event
      * @return DateStart <i>(Fecha de Inicio)</i> del Event
      */
-    public Timestamp getDateStart() {
+    public Date getDateStart() {
         return dateStart;
     }
 
@@ -67,7 +67,7 @@ public class Event implements Serializable {
      * Método Setter para definir la DateStart <i>(Fecha de Inicio)</i> del Event
      * @param dateStart <i>(Fecha de Inicio)</i> a asignar al Event
      */
-    public void setDateStart(Timestamp dateStart) {
+    public void setDateStart(Date dateStart) {
         this.dateStart = dateStart;
     }
 
@@ -75,7 +75,7 @@ public class Event implements Serializable {
      * Método Getter para obtener la DateEnd <i>(Fecha de Fin)</i> del Event
      * @return DateEnd <i>(Fecha de Fin)</i> del Event
      */
-    public Timestamp getDateEnd() {
+    public Date getDateEnd() {
         return dateEnd;
     }
 
@@ -83,7 +83,7 @@ public class Event implements Serializable {
      * Método Setter para asignar la DateEnd <i>(Fecha de Fin)</i> al Event
      * @param dateEnd <i>(Fecha de Fin)</i> a asignar al Event
      */
-    public void setDateEnd(Timestamp dateEnd) {
+    public void setDateEnd(Date dateEnd) {
         this.dateEnd = dateEnd;
     }
 
