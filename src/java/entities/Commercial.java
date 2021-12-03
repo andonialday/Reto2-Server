@@ -15,35 +15,53 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- *
+ * Esta clase es un tipo de Usuario que extiende de User
  * @author Enaitz Izagirre
  */
 @Entity
-@Table(name = "COMMERCIAL")
+@Table(name = "COMMERCIAL", schema="reto2g1c")
 public class Commercial extends User implements Serializable{
     
+    //La especializacion del Comercial se implementa mediante las opciones de la clase Especialization
     @Enumerated(EnumType.STRING)
     private Especialization especialization;
     
+    //La lista de clientes que tiene un comercial 
     @OneToMany(mappedBy = "comercial")
     private List<Client> clients;
 
+    /**
+     * Metodo para obtener la especializacion
+     * @return Devuelve una Especializacion
+     */
     public Especialization getEspecialization() {
         return especialization;
     }
 
+    /**
+     * Metodo`para obtener el Listado de clientes
+     * @return Devuelve el array de clientes
+     */
     public List<Client> getClients() {
         return clients;
     }
 
+    /**
+     * Metodo para establecer la especializacion
+     * @param especialization
+     */
     public void setEspecialization(Especialization especialization) {
         this.especialization = especialization;
     }
 
+    /**
+     * Metodo para establecer un nuevo Listado de Clientes
+     * @param clients
+     */
     public void setClients(List<Client> clients) {
         this.clients = clients;
     }
-
+   
     @Override
     public String toString() {
         return super.toString() + " Tipo - Commercial{" + "especialization=" + especialization + ", clients=" + clients + '}';
@@ -58,6 +76,7 @@ public class Commercial extends User implements Serializable{
         return hash;
     }
 
+   
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

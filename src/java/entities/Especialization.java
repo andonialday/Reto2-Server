@@ -14,12 +14,22 @@ import java.io.Serializable;
 public enum Especialization implements Serializable{
 
     /**
-     * Opcion 0 de la enumeracion, el Commercial es un técnico de sonido
+     * Opcion 0 de la enumeracion, el Commercial es un técnico de Sonido
      */
-    ADMIN,
+    SONIDO,
 
     /**
-     * Enumeration option 1, the user has User privileges
+     * Enumeration option 1, el Commercial es un técnico de Iluminacion
      */
-    USER;
+    ILUMINACION,
+    
+    /**
+     * Enumeration option 2, el Commercial es un técnico de Pirotecnia
+     */
+    PIROTECNIA,
+    
+    /**
+     * Enumeration option 3, el Commercial es un técnico de Logistica
+     */
+    LOGISTICA;
 }
