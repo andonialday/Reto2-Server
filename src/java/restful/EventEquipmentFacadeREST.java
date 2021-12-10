@@ -45,14 +45,14 @@ public class EventEquipmentFacadeREST extends AbstractFacade<EventEquipment> {
         javax.ws.rs.core.MultivaluedMap<String, String> map = pathSegment.getMatrixParameters();
         java.util.List<String> eventId = map.get("eventId");
       
-        /*if (eventId != null && !eventId.isEmpty()) {
+        if (eventId != null && !eventId.isEmpty()) {
             key.setEventId(new java.lang.Integer(eventId.get(0)));
         }
         java.util.List<String> equipmentId = map.get("equipmentId");
         if (equipmentId != null && !equipmentId.isEmpty()) {
             key.setEquipmentId(new java.lang.Integer(equipmentId.get(0)));
         }
-*/
+
         return key;
     }
 

@@ -30,7 +30,7 @@ public class EventEquipmentId implements Serializable{
      * Método Setter para asignar un Event a la relación EventEquipment
      * @param eventId ID del Event a asignar a la relación EventEquipment
      */
-    public void setEvenId(Integer eventId) {
+    public void setEventId(Integer eventId) {
         this.eventId = eventId;
     }
 
@@ -49,5 +49,6 @@ public class EventEquipmentId implements Serializable{
     public void setEquipmentId(Integer equipmentId) {
         this.equipmentId = equipmentId;
     }
+
 
 }
