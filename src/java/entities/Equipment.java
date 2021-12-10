@@ -18,12 +18,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 /**
  * Entidad Equipment para gestion y control de Equipamiento
  * @author Aitor Perez
  */
 @Entity
 @Table(name = "EQUIPMENT", schema="reto2g1c")
+@XmlRootElement
 public class Equipment implements Serializable {
     
     
@@ -105,6 +108,7 @@ public class Equipment implements Serializable {
      * Metodo Getter para obtener los Event <i>(Eventos)</i> asignados al Equipamiento
      * @return Events <i>(Eventos)</i> del Equipamiento
      */
+    @XmlTransient
     public Set<EventEquipment> getEvents() {
         return events;
     }
