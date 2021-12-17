@@ -11,7 +11,10 @@ import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -22,6 +25,13 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jaime San Sebastián
  */
+
+@NamedQueries({
+    
+    @NamedQuery(name="findClientCommercial", query="SELECT l.commercial FROM Client l WHERE l.id=:idClient"),
+    
+})
+
 @Entity
 @Table(name = "CLIENT", schema = "reto2g1c")
 @XmlRootElement
@@ -33,8 +43,9 @@ public class Client extends User {
     @OneToMany(cascade = ALL, mappedBy = "client")
     private Set<Event> events;
 
-    @ManyToOne
-    private Commercial comercial;
+    
+    @ManyToOne (fetch = FetchType.EAGER)
+    private Commercial commercial;
 
     /**
      * Método Getter para obtener el tipo de un cliente
@@ -59,7 +70,6 @@ public class Client extends User {
      *
      * @return los eventos de un cliente
      */
-    @XmlTransient
     public Set<Event> getEvents() {
         return events;
     }
@@ -78,22 +88,23 @@ public class Client extends User {
      *
      * @return el comercial de un cliente
      */
-    public Commercial getComercial() {
-        return comercial;
+    @XmlTransient
+    public Commercial getCommercial() {
+        return commercial;
     }
 
     /**
      * Método Setter para asignar un Comercial al cliente
      *
-     * @param comercial el comercial de un cliente a establecer
+     * @param commercial el comercial de un cliente a establecer
      */
-    public void setComercial(Commercial comercial) {
-        this.comercial = comercial;
+    public void setCommercial(Commercial commercial) {
+        this.commercial = commercial;
     }
 
     @Override
     public String toString() {
-        return "Client{" + "Type=" + type + ", events=" + events + ", comercial=" + comercial + '}';
+        return "Client{" + "Type=" + type + ", events=" + events + ", commercial=" + commercial + '}';
     }
 
     @Override
@@ -101,7 +112,7 @@ public class Client extends User {
         int hash = 7;
         hash = 37 * hash + Objects.hashCode(this.type);
         hash = 37 * hash + Objects.hashCode(this.events);
-        hash = 37 * hash + Objects.hashCode(this.comercial);
+        hash = 37 * hash + Objects.hashCode(this.commercial);
         return hash;
     }
 
@@ -123,7 +134,7 @@ public class Client extends User {
         if (!Objects.equals(this.events, other.events)) {
             return false;
         }
-        if (!Objects.equals(this.comercial, other.comercial)) {
+        if (!Objects.equals(this.commercial, other.commercial)) {
             return false;
         }
         return true;

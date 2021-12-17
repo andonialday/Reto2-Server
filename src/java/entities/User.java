@@ -8,6 +8,7 @@ package entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,6 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,6 +28,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jaime San Sebastián y Enaitz Izaguirre
  */
+
+@NamedQueries({
+    
+    @NamedQuery(name="findUserByLogin", query="SELECT u FROM User u WHERE u.login=:login AND u.password=:password AND u.status IS 'ENABLED'"),
+    
+    @NamedQuery(name="findUserByClient", query="SELECT l FROM User l WHERE l.login=:login AND l.password=:lassword AND l.status IS 'ENABLED'"),
+    
+    @NamedQuery(name="findUserByCommercial", query="SELECT m FROM User m WHERE m.login=:login AND m.password=:password AND m.status IS 'ENABLED'")
+    
+})
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "USER", schema = "reto2g1c")
@@ -35,6 +49,7 @@ public class User implements Serializable {
     @GeneratedValue
     private Integer id;
 
+    @Column(unique = true)
     private String login;
     private String email;
     private String fullName;
