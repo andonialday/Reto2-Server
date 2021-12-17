@@ -14,6 +14,8 @@ import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,6 +26,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * Entidad Equipment para gestion y control de Equipamiento
  * @author Aitor Perez
  */
+@NamedQueries({
+  @NamedQuery(
+    name="findCostRange", query="SELECT q FROM Equipment q WHERE q.cost>:cost1 and q.cost<:cost2"),
+  @NamedQuery(
+    name="findOrderPreviousDate", query="SELECT q FROM Equipment q WHERE q.dateAdd<:date1"),
+  @NamedQuery(
+    name="findOrderAfterDate", query="SELECT q FROM Equipment q WHERE q.dateAdd>:date1"),
+})
 @Entity
 @Table(name = "EQUIPMENT", schema="reto2g1c")
 @XmlRootElement

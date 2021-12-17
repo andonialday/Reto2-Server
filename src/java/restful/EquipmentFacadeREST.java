@@ -6,7 +6,10 @@
 package restful;
 
 import entities.Equipment;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,7 +25,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author 2dam
+ * @author Aitor Perez
  */
 @Stateless
 @Path("entities.equipment")
@@ -37,14 +40,14 @@ public class EquipmentFacadeREST extends AbstractFacade<Equipment> {
 
     @POST
     @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void create(Equipment entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Integer id, Equipment entity) {
         super.edit(entity);
     }
@@ -57,21 +60,21 @@ public class EquipmentFacadeREST extends AbstractFacade<Equipment> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public Equipment find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Equipment> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Equipment> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
@@ -82,7 +85,55 @@ public class EquipmentFacadeREST extends AbstractFacade<Equipment> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+    
+    @GET
+    @Path("cost/{min}/{max}")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<Equipment> findCostRange(@PathParam("min") Double min, @PathParam("max") Double max) {
+       List<Equipment> equipments = null;
+       try{
+           equipments = (em.createNamedQuery("findCostRange")
+                   .setParameter("cost1", min).setParameter("cost2", max).getResultList());
+                   
+                  
+       }catch ( Exception e) {
+           
+       }
+        return equipments;
+      }
+    
+    @GET
+    @Path("datePrev/{datePrev}")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<Equipment> findOrderPreviousDate(@PathParam("datePrev") Date datePrev) {
+       List<Equipment> equipments = null;
+       try{
+           equipments = (em.createNamedQuery("findOrderPreviousDate")
+                   .setParameter("date1", datePrev).getResultList());
+                   
+                  
+       }catch ( Exception e) {
+           
+       }
+        return equipments;
+      }
+    
+    @GET
+    @Path("dateAfter/{dateAfter}")
+    @Produces({MediaType.APPLICATION_XML})
+    public Set<Equipment> findOrderAfterDate(@PathParam("dateAfter") Date dateAfter) {
+       Set<Equipment> equipments = null;
+       try{
+           equipments = new HashSet (em.createNamedQuery("findOrderAfterDate")
+                   .setParameter("date1", dateAfter).getResultList());
+                   
+                  
+       }catch ( Exception e) {
+           
+       }
+        return equipments;
+      }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
