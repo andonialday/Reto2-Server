@@ -19,6 +19,16 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Andoni Alday
  */
+@NamedQueries ({
+//    @NamedQuery (
+//            name="findDateStartRange" , query="SELECT v FROM Event v WHERE v.dateStart>:date1 AND v.dateStart<:date2 AND v.client.id=:idCli"),
+//    @NamedQuery (
+//            name="findDateEndRange" , query="SELECT v FROM Event v WHERE v.dateEnd>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli"),
+//    @NamedQuery (
+//            name="findDateRange" , query="SELECT v FROM Event v WHERE v.dateStart>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli"),
+    @NamedQuery (
+            name="findEventByClient" , query="SELECT v FROM Event v WHERE v.client.id=:idCli")
+})
 @Entity
 @Table(name = "EVENT", schema="reto2g1c")
 @XmlRootElement
@@ -110,6 +120,7 @@ public class Event implements Serializable {
      * Método Getter para obtener el Client <i>(Client)</i> "propietario" del Event
      * @return Client<i>(Cliente)</i> "propietario" del Event
      */
+    @XmlTransient
     public Client getClient() {
         return client;
     }
@@ -188,5 +199,5 @@ public class Event implements Serializable {
         }
         return true;
     }
-
+    
 }

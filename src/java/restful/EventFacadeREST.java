@@ -7,6 +7,7 @@ package restful;
 
 import entities.Event;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 @Path("entities.event")
 public class EventFacadeREST extends AbstractFacade<Event> {
 
+    private static final Logger LOGGER = Logger.getLogger("package.class");
     @PersistenceContext(unitName = "Reto2G1cServerPU")
     private EntityManager em;
 
@@ -37,14 +39,14 @@ public class EventFacadeREST extends AbstractFacade<Event> {
 
     @POST
     @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void create(Event entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Integer id, Event entity) {
         super.edit(entity);
     }
@@ -57,21 +59,21 @@ public class EventFacadeREST extends AbstractFacade<Event> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public Event find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Event> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Event> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
@@ -88,4 +90,55 @@ public class EventFacadeREST extends AbstractFacade<Event> {
         return em;
     }
     
+//    @GET
+//    @Path("dateStart/{dateMin}/{dateMax}/{idCli}")
+//    @Produces({MediaType.APPLICATION_XML})
+//     public Set<Event> findStartRange(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax, @PathParam("idCli") Integer idCli) {
+//        Set<Event> events = null;
+//        try {
+//            events = new HashSet<>(em.createNamedQuery("findDateStartRange").setParameter("date1", dateMin).setParameter("date2", dateMax).setParameter("idCli", idCli).getResultList());
+//        } catch (Exception e) {
+//            LOGGER.severe("Event -> findStartRange" + e.getMessage());
+//        }
+//        return events;
+//    }
+//     
+//    @GET
+//    @Path("dateEnd/{dateMin}/{dateMax}/{idCli}")
+//    @Produces({MediaType.APPLICATION_XML})
+//     public List<Event> findEndRange(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax, @PathParam("idCli") Integer idCli) {
+//        List<Event> events = null;
+//        try {
+//            events = (em.createNamedQuery("findDateEndRange").setParameter("date1", dateMin).setParameter("date2", dateMax).setParameter("idCli", idCli).getResultList());
+//        } catch (Exception e) {
+//            LOGGER.severe("Event -> findEndRange" + e.getMessage());
+//        }
+//        return events;
+//    }
+//     
+//    @GET
+//    @Path("date/{dateMin}/{dateMax}/{idCli}")
+//    @Produces({MediaType.APPLICATION_XML})
+//     public List<Event> findDateRange(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax, @PathParam("idCli") Integer idCli) {
+//        List<Event> events = null;
+//        try {
+//            events = (em.createNamedQuery("findDateRange").setParameter("date1", dateMin).setParameter("date2", dateMax).setParameter("idCli", idCli).getResultList());
+//        } catch (Exception e) {
+//            LOGGER.severe("Event -> findDateRange" + e.getMessage());
+//        }
+//        return events;
+//    }
+     
+    @GET
+    @Path("byClient/{idCli}")
+    @Produces({MediaType.APPLICATION_XML})
+     public List<Event> findEventByClient(@PathParam("idCli") Integer idCli) {
+        List<Event> events = null;
+        try {
+            events = (em.createNamedQuery("findEventByClient").setParameter("idCli", idCli).getResultList());
+        } catch (Exception e) {
+            LOGGER.severe("Event -> findAssignedEquipment" + e.getMessage());
+        }
+        return events;
+    }
 }

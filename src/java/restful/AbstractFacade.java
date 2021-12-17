@@ -27,7 +27,11 @@ public abstract class AbstractFacade<T> {
     }
 
     public void edit(T entity) {
-        getEntityManager().merge(entity);
+        if (!getEntityManager().contains(entity)) {
+            getEntityManager().merge(entity);
+        } 
+        getEntityManager().flush();
+
     }
 
     public void remove(T entity) {
@@ -60,5 +64,5 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
 }

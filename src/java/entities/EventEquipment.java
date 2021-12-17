@@ -11,8 +11,11 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entidad EventEquipment, representativa de la relacion entre os Event y los
@@ -21,6 +24,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Andoni Alday , Aitor Perez
  */
+
+@NamedQueries ({
+    @NamedQuery (
+            name="findAssignedEquipment" , query="SELECT e FROM EventEquipment e WHERE e.event.id=:idEvent"),
+    @NamedQuery (
+            name="findAssignedEvent" , query="SELECT e FROM EventEquipment e WHERE e.equipment.id=:idEquipment")
+})
+
 @Entity
 @Table(name = "EVENTEQUIPMENT", schema = "reto2g1c")
 @XmlRootElement
@@ -29,10 +40,12 @@ public class EventEquipment implements Serializable {
     @EmbeddedId
     private EventEquipmentId eventEquipmentId;
 
+    @XmlTransient
     @ManyToOne
     @MapsId("eventId")
     private Event event;
 
+    @XmlTransient
     @ManyToOne
     @MapsId("equipmentId")
     private Equipment equipment;
@@ -62,6 +75,7 @@ public class EventEquipment implements Serializable {
      *
      * @return event Event de la relación
      */
+    @XmlTransient
     public Event getEvent() {
         return event;
     }
@@ -80,6 +94,7 @@ public class EventEquipment implements Serializable {
      *
      * @return equipment Equipment de la relación
      */
+    @XmlTransient
     public Equipment getEquipment() {
         return equipment;
     }
