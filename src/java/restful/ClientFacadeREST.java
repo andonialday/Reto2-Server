@@ -7,6 +7,7 @@ package restful;
 
 import entities.Client;
 import entities.Commercial;
+import entities.Privilege;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -87,12 +88,11 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-    
+    /*
     @GET
     @Path("commercial/{idClient}")
     @Produces({MediaType.APPLICATION_XML})
-    public Commercial 
-        findClientCommercial(@PathParam("idClient") Integer idClient)
+    public Commercial findClientCommercial(@PathParam("idClient") Integer idClient)
         throws InternalServerErrorException{
         Commercial commercial = null;
         try{
@@ -108,6 +108,24 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
         return commercial;
     }
         
+    @DELETE
+    @Path("client/{privilege}")
+    @Produces({MediaType.APPLICATION_XML})
+    public void deleteAllClientDisabled(@PathParam("privilege") Privilege privilege)
+        throws InternalServerErrorException{
+        Client client = null;
+        try{
+            LOGGER.info("Deleting all clients disabled");
+            client = (Client) em.createNamedQuery("deleteAllClientDisabled")
+                    .setParameter("privilege", privilege)
+                    .getSingleResult();
+        }catch(Exception e){
+            LOGGER.severe("Error deleting all clients disabled."
+                +e.getLocalizedMessage());
+            throw new InternalServerErrorException(e);
+        }
+    }
+        */
     @Override
     protected EntityManager getEntityManager() {
         return em;

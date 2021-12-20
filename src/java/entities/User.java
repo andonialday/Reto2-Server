@@ -26,16 +26,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Clase con los parámetros para la creación y gestión de usuarios
  *
- * @author Jaime San Sebastián y Enaitz Izaguirre
+ * @author Jaime San Sebastián y Enaitz Izagirre
  */
 
 @NamedQueries({
     
     @NamedQuery(name="findUserByLogin", query="SELECT u FROM User u WHERE u.login=:login AND u.password=:password AND u.status IS 'ENABLED'"),
-    
-    @NamedQuery(name="findUserByClient", query="SELECT l FROM User l WHERE l.login=:login AND l.password=:lassword AND l.status IS 'ENABLED'"),
-    
-    @NamedQuery(name="findUserByCommercial", query="SELECT m FROM User m WHERE m.login=:login AND m.password=:password AND m.status IS 'ENABLED'")
     
 })
 

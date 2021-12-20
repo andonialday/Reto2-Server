@@ -5,8 +5,11 @@
  */
 package restful;
 
+import entities.Client;
+import entities.Commercial;
 import entities.Privilege;
 import entities.User;
+import entities.UserStatus;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,7 +18,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -26,15 +28,14 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Jaime San Sebastián y Enaitz Izaguirre
+ * @author Jaime San Sebastián y Enaitz Izagirre
  */
-
 @Stateless
 @Path("entities.user")
 public class UserFacadeREST extends AbstractFacade<User> {
 
     private static final Logger LOGGER = Logger.getLogger("package.class");
-    
+
     @PersistenceContext(unitName = "Reto2G1cServerPU")
     private EntityManager em;
 
@@ -89,32 +90,53 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-    
+
     @GET
-    @Path("login/{user}")
+    @Path("signIn/{user}")
     @Produces({MediaType.APPLICATION_XML})
     public User SignIn(@PathParam("user") User user)
-        throws InternalServerErrorException{
-        try{
+            throws InternalServerErrorException {
+
+        try {
             LOGGER.info("Finding user");
-            user = (User) em.createNamedQuery("login")
+            user = (User) em.createNamedQuery("findUserByLogin")
                     .setParameter("login", user.getLogin()).setParameter("password", user.getPassword())
                     .getResultList();
-        }catch(Exception e){
+        } catch (Exception e) {
             LOGGER.severe("Error finding user."
-                +e.getLocalizedMessage());
-            throw new NotAuthorizedException(e);
-        }if(user.getPrivilege()== Privilege.ADMIN){
+                    + e.getLocalizedMessage());
+            throw new InternalServerErrorException(e);
+
+        }
+        if (user.getPrivilege() == Privilege.ADMIN) {
             return user;
         } else {
-            
+
+            if (user.getStatus() == UserStatus.ENABLED) {
+                LOGGER.info("User enabled");
+
+                if (user instanceof Client) {
+                    LOGGER.info("The User is a client");
+                    Client client = (Client) user;
+                    return client;
+
+                } else if (user instanceof Commercial) {
+                    LOGGER.info("The User is a commercial");
+                    Commercial commercial = (Commercial) user;
+                    return commercial;
+                }
+
+            } else {
+                LOGGER.info("User disabled");
+            }
         }
+
         return user;
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
+@Override
+        protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }
