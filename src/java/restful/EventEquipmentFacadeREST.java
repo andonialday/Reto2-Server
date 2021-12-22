@@ -138,7 +138,7 @@ public class EventEquipmentFacadeREST extends AbstractFacade<EventEquipment> {
     public List<EventEquipment> findAssignedEvent(@PathParam("idEquipment") Integer idEquipment) {
         List<EventEquipment> events = null;
         try {
-            events = (em.createNamedQuery("findAssignedEquipment").setParameter("idEquipment", idEquipment).getResultList());
+            events = (em.createNamedQuery("findAssignedEvent").setParameter("idEquipment", idEquipment).getResultList());
         } catch (Exception e) {
             LOGGER.severe("Equipment -> findAssignedEquipment" + e.getMessage());
         }

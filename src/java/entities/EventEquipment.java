@@ -75,7 +75,6 @@ public class EventEquipment implements Serializable {
      *
      * @return event Event de la relación
      */
-    @XmlTransient
     public Event getEvent() {
         return event;
     }
@@ -94,7 +93,6 @@ public class EventEquipment implements Serializable {
      *
      * @return equipment Equipment de la relación
      */
-    @XmlTransient
     public Equipment getEquipment() {
         return equipment;
     }

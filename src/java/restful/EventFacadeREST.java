@@ -6,6 +6,9 @@
 package restful;
 
 import entities.Event;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -90,44 +93,83 @@ public class EventFacadeREST extends AbstractFacade<Event> {
         return em;
     }
     
-//    @GET
-//    @Path("dateStart/{dateMin}/{dateMax}/{idCli}")
-//    @Produces({MediaType.APPLICATION_XML})
-//     public Set<Event> findStartRange(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax, @PathParam("idCli") Integer idCli) {
-//        Set<Event> events = null;
-//        try {
-//            events = new HashSet<>(em.createNamedQuery("findDateStartRange").setParameter("date1", dateMin).setParameter("date2", dateMax).setParameter("idCli", idCli).getResultList());
-//        } catch (Exception e) {
-//            LOGGER.severe("Event -> findStartRange" + e.getMessage());
-//        }
-//        return events;
-//    }
-//     
-//    @GET
-//    @Path("dateEnd/{dateMin}/{dateMax}/{idCli}")
-//    @Produces({MediaType.APPLICATION_XML})
-//     public List<Event> findEndRange(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax, @PathParam("idCli") Integer idCli) {
-//        List<Event> events = null;
-//        try {
-//            events = (em.createNamedQuery("findDateEndRange").setParameter("date1", dateMin).setParameter("date2", dateMax).setParameter("idCli", idCli).getResultList());
-//        } catch (Exception e) {
-//            LOGGER.severe("Event -> findEndRange" + e.getMessage());
-//        }
-//        return events;
-//    }
-//     
-//    @GET
-//    @Path("date/{dateMin}/{dateMax}/{idCli}")
-//    @Produces({MediaType.APPLICATION_XML})
-//     public List<Event> findDateRange(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax, @PathParam("idCli") Integer idCli) {
-//        List<Event> events = null;
-//        try {
-//            events = (em.createNamedQuery("findDateRange").setParameter("date1", dateMin).setParameter("date2", dateMax).setParameter("idCli", idCli).getResultList());
-//        } catch (Exception e) {
-//            LOGGER.severe("Event -> findDateRange" + e.getMessage());
-//        }
-//        return events;
-//    }
+    @GET
+    @Path("dateStart/{dateMin}/{dateMax}")
+    @Produces({MediaType.APPLICATION_XML})
+     public List<Event> findStartRange(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax) {
+        List<Event> events = null;
+        try {
+            events = em.createNamedQuery("findDateStartRange").setParameter("date1", dateMin).setParameter("date2", dateMax).getResultList();
+        } catch (Exception e) {
+            LOGGER.severe("Event -> findStartRange" + e.getMessage());
+        }
+        return events;
+    }
+     
+    @GET
+    @Path("dateEnd/{dateMin}/{dateMax}")
+    @Produces({MediaType.APPLICATION_XML})
+     public List<Event> findEndRange(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax) {
+        List<Event> events = null;
+        try {
+            events = (em.createNamedQuery("findDateEndRange").setParameter("date1", dateMin).setParameter("date2", dateMax).getResultList());
+        } catch (Exception e) {
+            LOGGER.severe("Event -> findEndRange" + e.getMessage());
+        }
+        return events;
+    }
+     
+    @GET
+    @Path("date/{dateMin}/{dateMax}")
+    @Produces({MediaType.APPLICATION_XML})
+     public List<Event> findDateRange(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax) {
+        List<Event> events = null;
+        try {
+            events = (em.createNamedQuery("findDateRange").setParameter("date1", dateMin).setParameter("date2", dateMax).getResultList());
+        } catch (Exception e) {
+            LOGGER.severe("Event -> findDateRange" + e.getMessage());
+        }
+        return events;
+    }
+
+    @GET
+    @Path("dateStartClient/{dateMin}/{dateMax}/{idCli}")
+    @Produces({MediaType.APPLICATION_XML})
+     public List<Event> findStartRangeClient(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax, @PathParam("idCli") Integer idCli) {
+        List<Event> events = null;
+        try {
+            events = em.createNamedQuery("findDateStartRangeClient").setParameter("date1", dateMin).setParameter("date2", dateMax).setParameter("idCli", idCli).getResultList();
+        } catch (Exception e) {
+            LOGGER.severe("Event -> findStartRange" + e.getMessage());
+        }
+        return events;
+    }
+     
+    @GET
+    @Path("dateEndClient/{dateMin}/{dateMax}/{idCli}")
+    @Produces({MediaType.APPLICATION_XML})
+     public List<Event> findEndRangeClient(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax, @PathParam("idCli") Integer idCli) {
+        List<Event> events = null;
+        try {
+            events = (em.createNamedQuery("findDateEndRangeClient").setParameter("date1", dateMin).setParameter("date2", dateMax).setParameter("idCli", idCli).getResultList());
+        } catch (Exception e) {
+            LOGGER.severe("Event -> findEndRange" + e.getMessage());
+        }
+        return events;
+    }
+     
+    @GET
+    @Path("dateClient/{dateMin}/{dateMax}/{idCli}")
+    @Produces({MediaType.APPLICATION_XML})
+     public List<Event> findDateRangeClient(@PathParam("dateMin") Date dateMin, @PathParam("dateMax") Date dateMax, @PathParam("idCli") Integer idCli) {
+        List<Event> events = null;
+        try {
+            events = (em.createNamedQuery("findDateRangeClient").setParameter("date1", dateMin).setParameter("date2", dateMax).setParameter("idCli", idCli).getResultList());
+        } catch (Exception e) {
+            LOGGER.severe("Event -> findDateRange" + e.getMessage());
+        }
+        return events;
+    }
      
     @GET
     @Path("byClient/{idCli}")
@@ -138,6 +180,24 @@ public class EventFacadeREST extends AbstractFacade<Event> {
             events = (em.createNamedQuery("findEventByClient").setParameter("idCli", idCli).getResultList());
         } catch (Exception e) {
             LOGGER.severe("Event -> findAssignedEquipment" + e.getMessage());
+        }
+        return events;
+    }
+     
+    @GET
+    @Path("oldest/{year}")
+    @Produces({MediaType.APPLICATION_XML})
+     public List<Event> deleteOldestEvents(@PathParam("year") Integer year) {
+        List<Event> events = null;
+        LocalDate time = LocalDate.now();
+        Date date = Date.from(time.atStartOfDay().toInstant(ZoneOffset.UTC));
+        date.setYear(date.getYear()-year);
+        try {
+            em.createNamedQuery("deleteOldestEvents").setParameter("date", date).executeUpdate();
+            em.flush();
+            events = findAll();
+        } catch (Exception e) {
+            LOGGER.severe("Event -> deledteOldestEvents" + e.getMessage());
         }
         return events;
     }
