@@ -33,6 +33,9 @@ import javax.xml.bind.annotation.XmlTransient;
     name="findOrderPreviousDate", query="SELECT q FROM Equipment q WHERE q.dateAdd<:date1"),
   @NamedQuery(
     name="findOrderAfterDate", query="SELECT q FROM Equipment q WHERE q.dateAdd>:date1"),
+   @NamedQuery(
+    name="deleteOldEquip", query="DELETE FROM Equipment WHERE dateAdd=:date1"),
+  /* name="deleteOldEquip", query="DELETE FROM Equipment WHERE dateAdd<:current_date'-'365*year"),*/
 })
 @Entity
 @Table(name = "EQUIPMENT", schema="reto2g1c")

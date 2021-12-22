@@ -57,6 +57,7 @@ public class EquipmentFacadeREST extends AbstractFacade<Equipment> {
     public void remove(@PathParam("id") Integer id) {
         super.remove(super.find(id));
     }
+    
 
     @GET
     @Path("{id}")
@@ -121,10 +122,10 @@ public class EquipmentFacadeREST extends AbstractFacade<Equipment> {
     @GET
     @Path("dateAfter/{dateAfter}")
     @Produces({MediaType.APPLICATION_XML})
-    public Set<Equipment> findOrderAfterDate(@PathParam("dateAfter") Date dateAfter) {
-       Set<Equipment> equipments = null;
+    public List<Equipment> findOrderAfterDate(@PathParam("dateAfter") Date dateAfter) {
+       List<Equipment> equipments = null;
        try{
-           equipments = new HashSet (em.createNamedQuery("findOrderAfterDate")
+           equipments =  (em.createNamedQuery("findOrderAfterDate")
                    .setParameter("date1", dateAfter).getResultList());
                    
                   
@@ -133,6 +134,23 @@ public class EquipmentFacadeREST extends AbstractFacade<Equipment> {
        }
         return equipments;
       }
+    
+     @GET
+    @Path("oldEquip/{year}")
+    @Produces({MediaType.APPLICATION_XML})
+    public List<Equipment> deleteOldEquip(@PathParam("year") Date year) {
+       List<Equipment> equipments = null;
+       try{
+            em.createNamedQuery("deleteOldEquip")
+                   .setParameter("year", year);
+             equipments = findAll();
+                  
+       }catch ( Exception e) {
+           
+       }
+        return equipments;
+      }
+    
     
     @Override
     protected EntityManager getEntityManager() {
