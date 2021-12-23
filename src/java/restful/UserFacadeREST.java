@@ -5,11 +5,16 @@
  */
 package restful;
 
+import cypher.*;
 import entities.Client;
 import entities.Commercial;
 import entities.Privilege;
 import entities.User;
 import entities.UserStatus;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -47,13 +52,17 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(User entity) {
+        String descifrado = new String(Decrypt.decrypt(entity.getPassword().getBytes()), StandardCharsets.UTF_8);
+        entity.setPassword(Hashing.cifrarTexto(descifrado));
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") Integer id, User entity) {
+    public void edit(@PathParam("id") Integer id, User entity) { 
+        String descifrado = new String(Decrypt.decrypt(entity.getPassword().getBytes()), StandardCharsets.UTF_8);
+        entity.setPassword(Hashing.cifrarTexto(descifrado));
         super.edit(entity);
     }
 
@@ -99,8 +108,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
         try {
             LOGGER.info("Finding user");
+            String key = Hashing.cifrarTexto(user.getPassword());
             user = (User) em.createNamedQuery("findUserByLogin")
-                    .setParameter("login", user.getLogin()).setParameter("password", user.getPassword())
+                    .setParameter("login", user.getLogin()).setParameter("password", key)
                     .getResultList();
         } catch (Exception e) {
             LOGGER.severe("Error finding user."
@@ -133,7 +143,48 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
         return user;
     }
+    
+    @GET
+    @Path("resetPassword/{user}")
+    public void resetPasswordByLogin(@PathParam("user") String login)
+            throws InternalServerErrorException {
+            User user;
+            String newKey;
+            String safeKey;
+        try {
+            //FIND USER BY LOGIN
+            LOGGER.info("Finding user");
+            user = (User) em.createNamedQuery("findUserByLogin")
+                    .setParameter("login", login)
+                    .getSingleResult();
+            if (user != null) {
+            //GENERATE RANDOM PASSWORD IF USER EXISTS
+                newKey = RandomPasswordGenerator.generateRandomKey();
+            //ENVIAR POR EMAIL
+                Email.sendPasswordReset(user.getEmail(), newKey);
+            //HASH PASSWORD
+                safeKey = Hashing.cifrarTexto(newKey);
+            //UPDATE USER PASSWORD ON DATABASE
+                user.setPassword(safeKey);
+                updatePass(user.getId(), user);
+            }
+        } catch (Exception e) {
+            LOGGER.severe("Error finding user."
+                    + e.getLocalizedMessage());
+            throw new InternalServerErrorException(e);
 
+        }
+    }
+    
+    @PUT
+    @Path("{id}")
+    @Consumes({MediaType.APPLICATION_XML})
+    public void updatePass(@PathParam("id") Integer id, User entity) {
+        String descifrado = new String(Decrypt.decrypt(entity.getPassword().getBytes()), StandardCharsets.UTF_8);
+        entity.setPassword(Hashing.cifrarTexto(descifrado));
+        super.create(entity);
+    }
+    
 @Override
         protected EntityManager getEntityManager() {
         return em;

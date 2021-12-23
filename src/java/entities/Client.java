@@ -14,6 +14,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,17 +25,18 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jaime San Sebastián
  */
-
 @NamedQueries({
     
     //@NamedQuery(name="findClientCommercial", query="SELECT l.commercial FROM Client l WHERE l.id=:idClient"),
-    
+
     //@NamedQuery(name="findClientByType", query="SELECT l.client FROM Client l WHERE l.type=:type ORDER BY l.type"),
-    
+
     //@NamedQuery(name="deleteAllClientDisabled", query="DELETE FROM Client l WHERE l.client IS 'DISABLED'"),
-    
-    //@NamedQuery(name="insertClient", query="INSERT INTO Client l WHERE l.login=:login AND l.password=:password")
-    
+
+    //@NamedQuery(name="insertClient", query="INSERT INTO Client l WHERE l.login=:login AND l.password=:password"),
+
+    //@NamedQuery(name = "postLoginClient", query = "SELECT l.type, l.commercial.id, u.id, u.email, u.fullName, u.status, u.privilege, u.lastPasswordChange FROM Client l, User u WHERE u.user.id=:l.client.id")
+
 })
 
 @Entity
@@ -48,8 +50,7 @@ public class Client extends User {
     @OneToMany(cascade = ALL, mappedBy = "client")
     private Set<Event> events;
 
-    
-    @ManyToOne (fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Commercial commercial;
 
     /**

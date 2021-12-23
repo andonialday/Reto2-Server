@@ -31,7 +31,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @NamedQueries({
     
-    @NamedQuery(name="findUserByLogin", query="SELECT u FROM User u WHERE u.login=:login AND u.password=:password AND u.status IS 'ENABLED'"),
+    //@NamedQuery(name="findUserByLogin", query="SELECT u FROM User u WHERE u.login=:login AND u.password=:password AND u.status IS 'ENABLED'"),
+    
+    //@NamedQuery(name = "postLoginUser", query = "SELECT u.id, u.email, u.fullName, u.status, u.privilege, u.lastPasswordChange FROM User u"),
+    
+    @NamedQuery(name = "resetPasswordByLogin", query = "SELECT u.login FROM User u")
     
 })
 

@@ -88,6 +88,7 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
     public String countREST() {
         return String.valueOf(super.count());
     }
+    
     /*
     @GET
     @Path("commercial/{idClient}")
@@ -125,7 +126,8 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
             throw new InternalServerErrorException(e);
         }
     }
-        */
+    */
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
