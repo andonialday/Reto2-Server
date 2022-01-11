@@ -19,6 +19,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -26,6 +27,8 @@ import javax.mail.internet.MimeMultipart;
  */
 public class Email {
 
+     
+    
     private static final ResourceBundle configFile = ResourceBundle.getBundle("cypher.config");
     private static final String smtp = configFile.getString("HOST");
     private static final String port = configFile.getString("PORT");
@@ -37,9 +40,17 @@ public class Email {
 
     public static void sendPasswordReset(String receiver, String key) {
 
+        //Desencriptar los datos del property
+        byte[] usr = DatatypeConverter.parseHexBinary(user);
+        //pasarla a desencriptar
+        byte[] usr2 = Decrypt.decrypt(usr);
+        //convertir byte to array 
+        String userF = new String(usr2);
+        
+        
         LOGGER.info("Preparando conexión a servicio de correo");
         Properties props = new Properties();
-        props.put("mail.smtp.user", user);
+        props.put("mail.smtp.user", userF);
         props.put("mail.smtp.host", smtp);
         props.put("mail.smtp.port", port);
         props.put("mail.smtp.starttls.enable", "true");

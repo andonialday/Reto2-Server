@@ -30,6 +30,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.logging.Logger;
+import javax.persistence.Query;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -103,25 +105,34 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("signIn/{user}")
     @Produces({MediaType.APPLICATION_XML})
-    public User SignIn(@PathParam("user") User user)
-            throws InternalServerErrorException {
+    public User SignIn(@PathParam("user") User user) throws InternalServerErrorException {
 
         try {
             LOGGER.info("Finding user");
-            String key = Hashing.cifrarTexto(user.getPassword());
+            //COnvertir en hexadecimal
+            byte[] pass = DatatypeConverter.parseHexBinary(user.getPassword());
+            //pasarla a desencriptar 
+            byte[] pass2 = Decrypt.decrypt(pass);
+            //convertir byte to array 
+             String password = new String(pass2);
+             //Hasear la contraseña con MD5
+            String key = Hashing.cifrarTexto(password);
             user = (User) em.createNamedQuery("findUserByLogin")
                     .setParameter("login", user.getLogin()).setParameter("password", key)
                     .getResultList();
+            //Query query = em.getNamedQuery("login").setParameter("log", user.getLogin()).setParameter("pass", password);
         } catch (Exception e) {
             LOGGER.severe("Error finding user."
                     + e.getLocalizedMessage());
             throw new InternalServerErrorException(e);
 
         }
+        //hacer q la contraseña nunca vuelva al cliente llena 
+        user.setPassword(null);
         if (user.getPrivilege() == Privilege.ADMIN) {
             return user;
         } else {
-
+            
             if (user.getStatus() == UserStatus.ENABLED) {
                 LOGGER.info("User enabled");
 
@@ -140,7 +151,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 LOGGER.info("User disabled");
             }
         }
-
+        // si no esta bn devuelve user vacio / REVISAR 
         return user;
     }
     

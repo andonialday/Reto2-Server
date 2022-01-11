@@ -27,8 +27,8 @@ public class Hashing {
         String hashedText = null;
         try {
             LOGGER.info("Initiating new password security saving");
-            // Obtén una instancia de MessageDigest que usa SHA
-            messageDigest = MessageDigest.getInstance("SHA");
+            // Obtén una instancia de MessageDigest que usa MD5 (estaba en SHA)
+            messageDigest = MessageDigest.getInstance("MD5");
             // Convierte el texto en un array de bytes 
             byte[] bytes = texto.getBytes();
             // Actualiza el MessageDigest con el array de bytes 

@@ -46,6 +46,7 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
     @Consumes({MediaType.APPLICATION_XML})
     public void create(Client entity) {
         super.create(entity);
+        //hashear la contraseña
     }
 
     @PUT

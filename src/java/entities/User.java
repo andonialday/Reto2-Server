@@ -16,6 +16,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -37,6 +39,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     
     @NamedQuery(name = "resetPasswordByLogin", query = "SELECT u.login FROM User u")
     
+})
+
+@NamedNativeQueries({
+    
+    @NamedNativeQuery(name = "login", query = "CALL login(:log,:pass)")
+        
 })
 
 @Entity

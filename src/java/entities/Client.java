@@ -76,7 +76,7 @@ public class Client extends User {
      *
      * @return los eventos de un cliente
      */
-    public Set<Event> getEvents() {
+    public Set<Evento> getEvents() {
         return events;
     }
 
@@ -85,7 +85,7 @@ public class Client extends User {
      *
      * @param events los eventos de un cliente a establecer
      */
-    public void setEvents(Set<Event> events) {
+    public void setEvents(Set<Evento> events) {
         this.events = events;
     }
 
