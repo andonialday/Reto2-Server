@@ -18,8 +18,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Entidad EventEquipment, representativa de la relacion entre os Event y los
- * Equipment, indicando la Quantity <i>(Cantidad de Equipment)</i> de la
+ * Entidad EventEquipment, representativa de la relacion entre os Evento y los
+ Equipment, indicando la Quantity <i>(Cantidad de Equipment)</i> de la
  * relación
  *
  * @author Andoni Alday , Aitor Perez
@@ -43,7 +43,7 @@ public class EventEquipment implements Serializable {
     @XmlTransient
     @ManyToOne
     @MapsId("eventId")
-    private Event event;
+    private Evento event;
 
     @XmlTransient
     @ManyToOne
@@ -53,38 +53,38 @@ public class EventEquipment implements Serializable {
     private Integer quantity;
 
     /**
-     * Método Getter para obtener la ID combinada de Event y Equipment
+     * Método Getter para obtener la ID combinada de Evento y Equipment
      *
-     * @return eventEquipmentId ID combinada de Event y Equipment
+     * @return eventEquipmentId ID combinada de Evento y Equipment
      */
     public EventEquipmentId getEventEquipmentId() {
         return eventEquipmentId;
     }
 
     /**
-     * Método Setter para asignar una ID combinada de Event y Equipment
+     * Método Setter para asignar una ID combinada de Evento y Equipment
      *
-     * @param eventEquipmentId ID combinada de Event y Equipment
+     * @param eventEquipmentId ID combinada de Evento y Equipment
      */
     public void setEventEquipmentId(EventEquipmentId eventEquipmentId) {
         this.eventEquipmentId = eventEquipmentId;
     }
 
     /**
-     * Método Getter para obtener el Event de la relación
+     * Método Getter para obtener el Evento de la relación
      *
-     * @return event Event de la relación
+     * @return event Evento de la relación
      */
-    public Event getEvent() {
+    public Evento getEvent() {
         return event;
     }
 
     /**
-     * Método Setter para asignar un Event a la relación
+     * Método Setter para asignar un Evento a la relación
      *
-     * @param event Event a asignar a la relación
+     * @param event Evento a asignar a la relación
      */
-    public void setEvent(Event event) {
+    public void setEvent(Evento event) {
         this.event = event;
     }
 

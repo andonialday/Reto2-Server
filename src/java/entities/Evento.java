@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Entidad Event para la gestion de eventos
+ * Entidad Evento para la gestion de eventos
  *
  * @author Andoni Alday
  */
@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "EVENT", schema="reto2g1c")
 @XmlRootElement
-public class Event implements Serializable {
+public class Evento implements Serializable {
 
     @Id
     @GeneratedValue
@@ -60,72 +60,72 @@ public class Event implements Serializable {
     private Set<EventEquipment> equipments;
 
     /**
-     * Método Getter para obtener la ID del Event
-     * @return ID del Event
+     * Método Getter para obtener la ID del Evento
+     * @return ID del Evento
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * Método Setter para definir la ID del Event
-     * @param id a asignar al Event
+     * Método Setter para definir la ID del Evento
+     * @param id a asignar al Evento
      */
     public void setId(Integer id) {
         this.id = id;
     }
 
     /**
-     * Método Getter para obtener la DateStart <i>(Fecha de Inicio)</i> del Event
-     * @return DateStart <i>(Fecha de Inicio)</i> del Event
+     * Método Getter para obtener la DateStart <i>(Fecha de Inicio)</i> del Evento
+     * @return DateStart <i>(Fecha de Inicio)</i> del Evento
      */
     public Date getDateStart() {
         return dateStart;
     }
 
     /**
-     * Método Setter para definir la DateStart <i>(Fecha de Inicio)</i> del Event
-     * @param dateStart <i>(Fecha de Inicio)</i> a asignar al Event
+     * Método Setter para definir la DateStart <i>(Fecha de Inicio)</i> del Evento
+     * @param dateStart <i>(Fecha de Inicio)</i> a asignar al Evento
      */
     public void setDateStart(Date dateStart) {
         this.dateStart = dateStart;
     }
 
     /**
-     * Método Getter para obtener la DateEnd <i>(Fecha de Fin)</i> del Event
-     * @return DateEnd <i>(Fecha de Fin)</i> del Event
+     * Método Getter para obtener la DateEnd <i>(Fecha de Fin)</i> del Evento
+     * @return DateEnd <i>(Fecha de Fin)</i> del Evento
      */
     public Date getDateEnd() {
         return dateEnd;
     }
 
     /**
-     * Método Setter para asignar la DateEnd <i>(Fecha de Fin)</i> al Event
-     * @param dateEnd <i>(Fecha de Fin)</i> a asignar al Event
+     * Método Setter para asignar la DateEnd <i>(Fecha de Fin)</i> al Evento
+     * @param dateEnd <i>(Fecha de Fin)</i> a asignar al Evento
      */
     public void setDateEnd(Date dateEnd) {
         this.dateEnd = dateEnd;
     }
 
     /**
-     * Método Getter para obtener la Description <i>(Descripcion)</i> del Event
-     * @return Description <i>(Descripcion)</i> del Event
+     * Método Getter para obtener la Description <i>(Descripcion)</i> del Evento
+     * @return Description <i>(Descripcion)</i> del Evento
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Método Setter para asignar la Description <i>(Descripcion)</i> al Event
-     * @param description <i>(Descripcion)</i> a asignar al Event
+     * Método Setter para asignar la Description <i>(Descripcion)</i> al Evento
+     * @param description <i>(Descripcion)</i> a asignar al Evento
      */
     public void setDescription(String description) {
         this.description = description;
     }
     
     /**
-     * Método Getter para obtener el Client <i>(Client)</i> "propietario" del Event
-     * @return Client<i>(Cliente)</i> "propietario" del Event
+     * Método Getter para obtener el Client <i>(Client)</i> "propietario" del Evento
+     * @return Client<i>(Cliente)</i> "propietario" del Evento
      */
     @XmlTransient
     public Client getClient() {
@@ -133,16 +133,16 @@ public class Event implements Serializable {
     }
 
     /**
-     * Método Setter para asignar el Client <i>(Client)</i> "propietario" al Event
-     * @param client Client <i>(Cliente)</i> "propietario" a asignar al Event
+     * Método Setter para asignar el Client <i>(Client)</i> "propietario" al Evento
+     * @param client Client <i>(Cliente)</i> "propietario" a asignar al Evento
      */
     public void setClient(Client client) {
         this.client = client;
     }
      
     /**
-     * Método Getter para obtener los Equipments <i>(Equipamientos empleados)</i> del Event
-     * @return Equipments <i>(Equipamientos empleados)</i> del Event
+     * Método Getter para obtener los Equipments <i>(Equipamientos empleados)</i> del Evento
+     * @return Equipments <i>(Equipamientos empleados)</i> del Evento
      */
     @XmlTransient
     public Set<EventEquipment> getEquipments() {
@@ -150,8 +150,8 @@ public class Event implements Serializable {
     }
 
     /**
-     * Método Setter para asignar los Equipments <i>(Equipamientos empleados)</i> al Event
-     * @param equipments Equipments <i>(Equipamientos empleados)</i> a asignar al Event
+     * Método Setter para asignar los Equipments <i>(Equipamientos empleados)</i> al Evento
+     * @param equipments Equipments <i>(Equipamientos empleados)</i> a asignar al Evento
      */
     public void setEquipments(Set<EventEquipment> equipments) {
         this.equipments = equipments;
@@ -185,7 +185,7 @@ public class Event implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Event other = (Event) obj;
+        final Evento other = (Evento) obj;
         if (!Objects.equals(this.description, other.description)) {
             return false;
         }
