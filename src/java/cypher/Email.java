@@ -40,14 +40,14 @@ public class Email {
 
     public static void sendPasswordReset(String receiver, String key) {
 
-        
+        DecryptSim decrypt = new DecryptSim();
         
         //Pasar de hexadecimal a byte
         byte[] usr = DatatypeConverter.parseHexBinary(user);
         byte[] pass = DatatypeConverter.parseHexBinary(password);
         //desencriptar
-        byte[] usr2 = Decrypt.decrypt(usr);
-        byte[] pass2 = Decrypt.decrypt(pass);
+        byte[] usr2 = decrypt.decryptSim(usr);
+        byte[] pass2 = decrypt.decryptSim(pass);
         //convertir byte to String para usarla 
         String userF = new String(usr2);
         String passF = new String(pass2);

@@ -12,9 +12,6 @@ import entities.Privilege;
 import entities.User;
 import entities.UserStatus;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,7 +27,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.logging.Logger;
-import javax.persistence.Query;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -54,7 +50,8 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     @Consumes({MediaType.APPLICATION_XML})
     public void create(User entity) {
-        String descifrado = new String(Decrypt.decrypt(entity.getPassword().getBytes()), StandardCharsets.UTF_8);
+        byte[] pass = DatatypeConverter.parseHexBinary(entity.getPassword());
+        String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
         entity.setPassword(Hashing.cifrarTexto(descifrado));
         super.create(entity);
     }
@@ -62,8 +59,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void edit(@PathParam("id") Integer id, User entity) { 
-        String descifrado = new String(Decrypt.decrypt(entity.getPassword().getBytes()), StandardCharsets.UTF_8);
+    public void edit(@PathParam("id") Integer id, User entity) {
+        byte[] pass = DatatypeConverter.parseHexBinary(entity.getPassword());
+        String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
         entity.setPassword(Hashing.cifrarTexto(descifrado));
         super.edit(entity);
     }
@@ -109,14 +107,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
         try {
             LOGGER.info("Finding user");
-            //COnvertir en hexadecimal
             byte[] pass = DatatypeConverter.parseHexBinary(user.getPassword());
-            //pasarla a desencriptar 
-            byte[] pass2 = Decrypt.decrypt(pass);
-            //convertir byte to array 
-             String password = new String(pass2);
-             //Hasear la contraseña con MD5
-            String key = Hashing.cifrarTexto(password);
+            String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
+            //Hasear la contraseña con MD5
+            String key = Hashing.cifrarTexto(descifrado);
             user = (User) em.createNamedQuery("findUserByLogin")
                     .setParameter("login", user.getLogin()).setParameter("password", key)
                     .getResultList();
@@ -132,7 +126,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         if (user.getPrivilege() == Privilege.ADMIN) {
             return user;
         } else {
-            
+
             if (user.getStatus() == UserStatus.ENABLED) {
                 LOGGER.info("User enabled");
 
@@ -154,14 +148,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
         // si no esta bn devuelve user vacio / REVISAR 
         return user;
     }
-    
+
     @GET
     @Path("resetPassword/{user}")
     public void resetPasswordByLogin(@PathParam("user") String login)
             throws InternalServerErrorException {
-            User user;
-            String newKey;
-            String safeKey;
+        User user;
+        String newKey;
+        String safeKey;
         try {
             //FIND USER BY LOGIN
             LOGGER.info("Finding user");
@@ -169,15 +163,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     .setParameter("login", login)
                     .getSingleResult();
             if (user != null) {
-            //GENERATE RANDOM PASSWORD IF USER EXISTS
+                //GENERATE RANDOM PASSWORD IF USER EXISTS
                 newKey = RandomPasswordGenerator.generateRandomKey();
-            //ENVIAR POR EMAIL
+                //ENVIAR POR EMAIL
                 Email.sendPasswordReset(user.getEmail(), newKey);
-            //HASH PASSWORD
+                //HASH PASSWORD
                 safeKey = Hashing.cifrarTexto(newKey);
-            //UPDATE USER PASSWORD ON DATABASE
+                //UPDATE USER PASSWORD ON DATABASE
                 user.setPassword(safeKey);
-                updatePass(user.getId(), user);
+                super.edit(user);
             }
         } catch (Exception e) {
             LOGGER.severe("Error finding user."
@@ -186,18 +180,19 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
         }
     }
-    
+
     @PUT
-    @Path("{id}")
+    @Path("updatePassword/[user]")
     @Consumes({MediaType.APPLICATION_XML})
-    public void updatePass(@PathParam("id") Integer id, User entity) {
-        String descifrado = new String(Decrypt.decrypt(entity.getPassword().getBytes()), StandardCharsets.UTF_8);
-        entity.setPassword(Hashing.cifrarTexto(descifrado));
-        super.create(entity);
+    public void updatePass(@PathParam("ser") User user) {
+        byte[] key = DatatypeConverter.parseHexBinary(user.getPassword());
+        String descifrado = new String(DecryptSim.decryptAsim(key), StandardCharsets.UTF_8);
+        user.setPassword(Hashing.cifrarTexto(descifrado));
+        super.edit(user);
     }
-    
-@Override
-        protected EntityManager getEntityManager() {
+
+    @Override
+    protected EntityManager getEntityManager() {
         return em;
     }
 
