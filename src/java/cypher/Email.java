@@ -27,25 +27,31 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class Email {
 
-     
-    
     private static final ResourceBundle configFile = ResourceBundle.getBundle("cypher.config");
     private static final String smtp = configFile.getString("HOST");
     private static final String port = configFile.getString("PORT");
     private static final String user = configFile.getString("USER");
-    private static final String pass = configFile.getString("PASS");
+    private static final String password = configFile.getString("PASS");
     private static final Logger LOGGER = Logger.getLogger("package.class");
     private static final String subject = "Recuperación de contraseña solicitada";
     private static final String text = "Este es un mensaje deprueba";
 
+  
+
     public static void sendPasswordReset(String receiver, String key) {
 
-        //Desencriptar los datos del property
+        
+        
+        //Pasar de hexadecimal a byte
         byte[] usr = DatatypeConverter.parseHexBinary(user);
-        //pasarla a desencriptar
+        byte[] pass = DatatypeConverter.parseHexBinary(password);
+        //desencriptar
         byte[] usr2 = Decrypt.decrypt(usr);
-        //convertir byte to array 
+        byte[] pass2 = Decrypt.decrypt(pass);
+        //convertir byte to String para usarla 
         String userF = new String(usr2);
+        String passF = new String(pass2);
+
         
         
         LOGGER.info("Preparando conexión a servicio de correo");
@@ -63,7 +69,7 @@ public class Email {
                 new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, pass);
+                return new PasswordAuthentication(user, passF);
             }
         });
         try {

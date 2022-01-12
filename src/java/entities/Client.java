@@ -48,7 +48,7 @@ public class Client extends User {
     private Type type;
 
     @OneToMany(cascade = ALL, mappedBy = "client")
-    private Set<Event> events;
+    private Set<Evento> events;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Commercial commercial;
