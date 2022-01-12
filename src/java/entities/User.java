@@ -72,7 +72,7 @@ public class User implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date lastPasswordChange;
 
-    @OneToMany(cascade = ALL, mappedBy = "client")
+    @OneToMany(cascade = ALL, mappedBy = "user")
     private Set<SignIn> signIns;
 
     /**

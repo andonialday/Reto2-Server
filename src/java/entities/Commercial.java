@@ -30,7 +30,7 @@ public class Commercial extends User implements Serializable{
     private Especialization especialization;
     
     //La lista de clientes que tiene un comercial 
-    @OneToMany(mappedBy = "comercial")
+    @OneToMany(mappedBy = "commercial")
     private List<Client> clients;
 
     /**
