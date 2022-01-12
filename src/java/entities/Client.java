@@ -48,7 +48,7 @@ public class Client extends User {
     private Type type;
 
     @OneToMany(cascade = ALL, mappedBy = "client")
-    private Set<Evento> events;
+    private Set<Event> events;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Commercial commercial;
@@ -76,7 +76,7 @@ public class Client extends User {
      *
      * @return los eventos de un cliente
      */
-    public Set<Evento> getEvents() {
+    public Set<Event> getEvents() {
         return events;
     }
 
@@ -85,7 +85,7 @@ public class Client extends User {
      *
      * @param events los eventos de un cliente a establecer
      */
-    public void setEvents(Set<Evento> events) {
+    public void setEvents(Set<Event> events) {
         this.events = events;
     }
 
