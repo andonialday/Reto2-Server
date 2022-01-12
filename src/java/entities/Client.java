@@ -48,7 +48,7 @@ public class Client extends User {
     private Type type;
 
     @OneToMany(cascade = ALL, mappedBy = "client")
-    private Set<Event> events;
+    private Set<Evento> events;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Commercial commercial;
@@ -76,7 +76,7 @@ public class Client extends User {
      *
      * @return los eventos de un cliente
      */
-    public Set<Event> getEvents() {
+    public Set<Evento> getEvents() {
         return events;
     }
 
@@ -85,7 +85,7 @@ public class Client extends User {
      *
      * @param events los eventos de un cliente a establecer
      */
-    public void setEvents(Set<Event> events) {
+    public void setEvents(Set<Evento> events) {
         this.events = events;
     }
 
@@ -108,11 +108,19 @@ public class Client extends User {
         this.commercial = commercial;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Client{" + "Type=" + type + ", events=" + events + ", commercial=" + commercial + '}';
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -122,6 +130,11 @@ public class Client extends User {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

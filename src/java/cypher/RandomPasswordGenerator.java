@@ -6,17 +6,11 @@
 package cypher;
 
 import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  *
- * @author 2dam
+ * @author Jaime San Sebastián, Enaitz Izagirre y Andoni Alday
  */
 public class RandomPasswordGenerator {
 

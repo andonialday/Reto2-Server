@@ -28,7 +28,7 @@ import javax.xml.bind.DatatypeConverter;
 
 /**
  *
- * @author Jaime San Sebastián y Enaitz Izagirre
+ * @author Jaime San Sebastián, Enaitz Izagirre y Andoni Alday
  */
 public class DecryptASim {
 

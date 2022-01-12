@@ -8,6 +8,8 @@ package entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
+import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,6 +22,7 @@ import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,21 +33,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jaime San Sebastián y Enaitz Izagirre
  */
-
 @NamedQueries({
-    
     //@NamedQuery(name="findUserByLogin", query="SELECT u FROM User u WHERE u.login=:login AND u.password=:password AND u.status IS 'ENABLED'"),
-    
+
     //@NamedQuery(name = "postLoginUser", query = "SELECT u.id, u.email, u.fullName, u.status, u.privilege, u.lastPasswordChange FROM User u"),
-    
+
     @NamedQuery(name = "resetPasswordByLogin", query = "SELECT u.login FROM User u")
-    
+
 })
 
 @NamedNativeQueries({
-    
     @NamedNativeQuery(name = "login", query = "CALL login(:log,:pass)")
-        
+
 })
 
 @Entity
@@ -71,6 +71,9 @@ public class User implements Serializable {
 
     @Temporal(TemporalType.DATE)
     private Date lastPasswordChange;
+
+    @OneToMany(cascade = ALL, mappedBy = "client")
+    private Set<SignIn> signIns;
 
     /**
      * Método Getter para obtener la ID del usuario
@@ -209,32 +212,51 @@ public class User implements Serializable {
     }
 
     /**
-     * Método Getter para obtener el momento del último cambio de contraseña del
-     * usuario
+     * Método Setter para determinar el momento del último cambio de contraseña
+     * del usuario
      *
-     * @param lastPasswordChange el cambio de contraseña de un usuario a
-     * establecer
+     * @param lastPasswordChange el momento del ultimo cambio de contraseña de
+     * un usuario a establecer
      */
     public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 
+    /**
+     * Método Getter para obtener los ultimos inicios de sesion de un usuario
+     *
+     * @return los ultimos inicios de sesion del usuario
+     */
+    public Set<SignIn> getSignIns() {
+        return signIns;
+    }
+
+    /**
+     * Método Setter para determinar los ultimos inicios de sesion de un usuario
+     *
+     * @param signIns los ultimos inicios de sesion del usuario
+     */
+    public void setSignIns(Set<SignIn> signIns) {
+        this.signIns = signIns;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", login=" + login + ", email=" + email + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", password=" + password + ", lastPasswordChange=" + lastPasswordChange + '}';
+        return "User{" + "id=" + id + ", login=" + login + ", email=" + email + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", password=" + password + ", lastPasswordChange=" + lastPasswordChange + ", signIns=" + signIns + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 73 * hash + this.id;
-        hash = 73 * hash + Objects.hashCode(this.login);
-        hash = 73 * hash + Objects.hashCode(this.email);
-        hash = 73 * hash + Objects.hashCode(this.fullName);
-        hash = 73 * hash + Objects.hashCode(this.status);
-        hash = 73 * hash + Objects.hashCode(this.privilege);
-        hash = 73 * hash + Objects.hashCode(this.password);
-        hash = 73 * hash + Objects.hashCode(this.lastPasswordChange);
+        int hash = 5;
+        hash = 19 * hash + Objects.hashCode(this.id);
+        hash = 19 * hash + Objects.hashCode(this.login);
+        hash = 19 * hash + Objects.hashCode(this.email);
+        hash = 19 * hash + Objects.hashCode(this.fullName);
+        hash = 19 * hash + Objects.hashCode(this.status);
+        hash = 19 * hash + Objects.hashCode(this.privilege);
+        hash = 19 * hash + Objects.hashCode(this.password);
+        hash = 19 * hash + Objects.hashCode(this.lastPasswordChange);
+        hash = 19 * hash + Objects.hashCode(this.signIns);
         return hash;
     }
 
@@ -250,9 +272,6 @@ public class User implements Serializable {
             return false;
         }
         final User other = (User) obj;
-        if (this.id != other.id) {
-            return false;
-        }
         if (!Objects.equals(this.login, other.login)) {
             return false;
         }
@@ -265,6 +284,9 @@ public class User implements Serializable {
         if (!Objects.equals(this.password, other.password)) {
             return false;
         }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
         if (this.status != other.status) {
             return false;
         }
@@ -272,6 +294,9 @@ public class User implements Serializable {
             return false;
         }
         if (!Objects.equals(this.lastPasswordChange, other.lastPasswordChange)) {
+            return false;
+        }
+        if (!Objects.equals(this.signIns, other.signIns)) {
             return false;
         }
         return true;

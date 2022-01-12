@@ -23,7 +23,7 @@ import javax.xml.bind.DatatypeConverter;
 
 /**
  *
- * @author 2dam
+ * @author Jaime San Sebastián, Enaitz Izagirre y Andoni Alday
  */
 public class Email {
 
@@ -38,7 +38,8 @@ public class Email {
     private static final String password = configFile.getString("PASS");
     
     // Contenido de los mensajes
-    private static final String subject = mailConfig.getString("USER");
+    private static final String subjectReset = mailConfig.getString("SUBJECTRESET");
+    private static final String subjectChange = mailConfig.getString("SUBJECTCHANGE");
     private static final String text1 = mailConfig.getString("BODY1");
     private static final String text2 = mailConfig.getString("BODY1");    
     private static final String cambioPassword = configFile.getString("CAMBIOPASSWORD");
@@ -82,7 +83,7 @@ public class Email {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
-            message.setSubject(subject);
+            message.setSubject(subjectReset);
             LOGGER.info("Cabecera de mensaje lista");
             Multipart multipart = new MimeMultipart();
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
@@ -142,7 +143,7 @@ public class Email {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
-            message.setSubject(subject);
+            message.setSubject(subjectChange);
             LOGGER.info("Cabecera de mensaje lista");
             Multipart multipart = new MimeMultipart();
             MimeBodyPart mimeBodyPart = new MimeBodyPart();

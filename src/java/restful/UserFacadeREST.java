@@ -184,6 +184,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         byte[] key = DatatypeConverter.parseHexBinary(user.getPassword());
         String descifrado = new String(DecryptASim.decrypt(key), StandardCharsets.UTF_8);
         user.setPassword(Hashing.cifrarTexto(descifrado));
+        Email.sendPasswordChange(user.getEmail());
         super.edit(user);
     }
 

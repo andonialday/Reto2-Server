@@ -16,7 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  *
- * @author Jaime San Sebastián y Enaitz Izagirre
+ * @author Jaime San Sebastián, Enaitz Izagirre y Andoni Alday
  */
 public class DecryptSim {
 
