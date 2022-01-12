@@ -20,21 +20,21 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @NamedQueries ({
     @NamedQuery (
-            name="findDateStartRange" , query="SELECT v FROM Event v WHERE v.dateStart>:date1 AND v.dateStart<:date2"),
+            name="findDateStartRange" , query="SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateStart<:date2"),
     @NamedQuery (
-            name="findDateEndRange" , query="SELECT v FROM Event v WHERE v.dateEnd>:date1 AND v.dateEnd<:date2"),
+            name="findDateEndRange" , query="SELECT v FROM Evento v WHERE v.dateEnd>:date1 AND v.dateEnd<:date2"),
     @NamedQuery (
-            name="findDateRange" , query="SELECT v FROM Event v WHERE v.dateStart>:date1 AND v.dateEnd<:date2"),
+            name="findDateRange" , query="SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateEnd<:date2"),
     @NamedQuery (
-            name="findDateStartRangeClient" , query="SELECT v FROM Event v WHERE v.dateStart>:date1 AND v.dateStart<:date2 AND v.client.id=:idCli"),
+            name="findDateStartRangeClient" , query="SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateStart<:date2 AND v.client.id=:idCli"),
     @NamedQuery (
-            name="findDateEndRangeClient" , query="SELECT v FROM Event v WHERE v.dateEnd>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli"),
+            name="findDateEndRangeClient" , query="SELECT v FROM Evento v WHERE v.dateEnd>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli"),
     @NamedQuery (
-            name="findDateRangeClient" , query="SELECT v FROM Event v WHERE v.dateStart>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli"),
+            name="findDateRangeClient" , query="SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli"),
     @NamedQuery (
-            name="findEventByClient" , query="SELECT v FROM Event v WHERE v.client.id=:idCli"),
+            name="findEventByClient" , query="SELECT v FROM Evento v WHERE v.client.id=:idCli"),
     @NamedQuery (
-            name="deleteOldestEvents" , query="DELETE FROM Event v WHERE v.dateEnd<:date")
+            name="deleteOldestEvents" , query="DELETE FROM Evento v WHERE v.dateEnd<:date")
 })
 @Entity
 @Table(name = "EVENT", schema="reto2g1c")
