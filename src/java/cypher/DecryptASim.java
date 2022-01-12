@@ -9,13 +9,21 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -23,34 +31,41 @@ import javax.xml.bind.DatatypeConverter;
  * @author Jaime San Sebastián y Enaitz Izagirre
  */
 public class DecryptASim {
-    
-    private static final Logger LOGGER = Logger.getLogger("package.class");
-    private static PublicKey pubKey;
-    private static final String pathPublic = "cypher.public.key";
 
-    public static byte[] decrypt(byte[] key) {
-        byte[] pass = null;
-        
-        return pass;
-    }
-    
-    public static void pub() {
+    private static final Logger LOGGER = Logger.getLogger("package.class");
+    private static final ResourceBundle configFile = ResourceBundle.getBundle("cypher.config");
+    private static final String pathPrivate = configFile.getString("PRIVATEKEYPATH");
+    private static String RSA = "RSA";
+
+    private static PrivateKey priv() {
+        PrivateKey privKey = null;
         try {
             BufferedReader reader = null;
-            reader = new BufferedReader(new FileReader(pathPublic));
-            String pubK = reader.readLine();               
-            X509EncodedKeySpec x5 = new X509EncodedKeySpec(DatatypeConverter.parseHexBinary(pubK));
-            /*
-            byte[] publica = Files.readAllBytes(Paths.get(pathPublic));
-            X509EncodedKeySpec x5 = new X509EncodedKeySpec(publica);
-            */
-            pubKey = KeyFactory.getInstance("RSA/ECB/PKCS1Padding").generatePublic(x5);
+            reader = new BufferedReader(new FileReader(pathPrivate));
+            String privK = reader.readLine();
+            LOGGER.info("Clave privada leída");
+            PKCS8EncodedKeySpec pk = new PKCS8EncodedKeySpec(DatatypeConverter.parseHexBinary(privK));
+            privKey = KeyFactory.getInstance(RSA).generatePrivate(pk);
+            LOGGER.info("Clave privada lista para descifrar");
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DecryptASim.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }      
-        
+            Logger.getLogger(DecryptASim.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return privKey;
     }
-    
+
+    public static byte[] decrypt(byte[] cipherText) {
+        byte[] result = null;
+        try {
+            PrivateKey privKey = priv();
+            Cipher cipher = Cipher.getInstance(RSA);
+            cipher.init(Cipher.DECRYPT_MODE, privKey);
+            result = cipher.doFinal(cipherText);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+            Logger.getLogger(DecryptASim.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
 }

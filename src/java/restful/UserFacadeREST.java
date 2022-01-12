@@ -124,23 +124,20 @@ public class UserFacadeREST extends AbstractFacade<User> {
         //hacer q la contraseña nunca vuelva al cliente llena 
         user.setPassword(null);
         if (user.getPrivilege() == Privilege.ADMIN) {
-            return user;
         } else {
-
             if (user.getStatus() == UserStatus.ENABLED) {
                 LOGGER.info("User enabled");
-
                 if (user instanceof Client) {
                     LOGGER.info("The User is a client");
-                    Client client = (Client) user;
-                    return client;
-
+                    User cli = new Client();
+                    cli = user;
+                    return cli;
                 } else if (user instanceof Commercial) {
                     LOGGER.info("The User is a commercial");
-                    Commercial commercial = (Commercial) user;
-                    return commercial;
+                    User com = new Commercial();
+                    com = user;
+                    return com;
                 }
-
             } else {
                 LOGGER.info("User disabled");
             }
@@ -151,16 +148,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
     @GET
     @Path("resetPassword/{user}")
-    public void resetPasswordByLogin(@PathParam("user") String login)
+    public void resetPasswordByLogin(@PathParam("user") User user)
             throws InternalServerErrorException {
-        User user;
         String newKey;
         String safeKey;
         try {
             //FIND USER BY LOGIN
             LOGGER.info("Finding user");
             user = (User) em.createNamedQuery("findUserByLogin")
-                    .setParameter("login", login)
+                    .setParameter("login", user.getLogin())
                     .getSingleResult();
             if (user != null) {
                 //GENERATE RANDOM PASSWORD IF USER EXISTS
@@ -184,9 +180,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @PUT
     @Path("updatePassword/[user]")
     @Consumes({MediaType.APPLICATION_XML})
-    public void updatePass(@PathParam("ser") User user) {
+    public void updatePass(@PathParam("user") User user) {
         byte[] key = DatatypeConverter.parseHexBinary(user.getPassword());
-        String descifrado = new String(DecryptSim.decryptAsim(key), StandardCharsets.UTF_8);
+        String descifrado = new String(DecryptASim.decrypt(key), StandardCharsets.UTF_8);
         user.setPassword(Hashing.cifrarTexto(descifrado));
         super.edit(user);
     }

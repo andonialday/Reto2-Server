@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public class RandomPasswordGenerator {
 
     private static final Logger LOGGER = Logger.getLogger("package.class");
-    
+
     public static String generateRandomKey() {
         LOGGER.info("Generating new password");
         // ASCII range – alphanumeric (0-9, a-z, A-Z)
@@ -29,7 +29,7 @@ public class RandomPasswordGenerator {
 
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder();
-        
+
         boolean aceptable = false;
 
         // each iteration of the loop randomly chooses a character from the given
@@ -42,11 +42,11 @@ public class RandomPasswordGenerator {
                 int randomIndex = random.nextInt(chars.length());
                 sb.append(chars.charAt(randomIndex));
             }
-        LOGGER.info("Checking new password is safe");
+            LOGGER.info("Checking new password is safe");
             aceptable = validatePassword(sb.toString());
             if (!aceptable) {
                 sb.delete(0, 9);
-        LOGGER.info("Non-safe password");
+                LOGGER.info("Non-safe password");
             }
         } while (!aceptable);
         return sb.toString();
@@ -57,24 +57,24 @@ public class RandomPasswordGenerator {
         boolean lower = false;
         boolean num = false;
         boolean aceptable = false;
-            for (int i = 0; i < key.length(); i++) {
+        for (int i = 0; i < key.length(); i++) {
             //comprobacion de que contiene un caracter numerico
-                if (Character.isDigit(key.charAt(i))) {
-                    num = true;
-                }
+            if (Character.isDigit(key.charAt(i))) {
+                num = true;
+            }
             //comprobacion de que contiene una mayuscula
-                if (Character.isUpperCase(key.charAt(i))) {
-                    upper = true;
-                }
+            if (Character.isUpperCase(key.charAt(i))) {
+                upper = true;
+            }
             //comprobacion de que contiene una minuscula
-                if (Character.isLowerCase(key.charAt(i))) {
-                    lower = true;
-                }
+            if (Character.isLowerCase(key.charAt(i))) {
+                lower = true;
             }
-            if (num && upper && lower) {
-                aceptable = true;
-        LOGGER.info("New password is safe");
-            }
+        }
+        if (num && upper && lower) {
+            aceptable = true;
+            LOGGER.info("New password is safe");
+        }
         return aceptable;
     }
 
