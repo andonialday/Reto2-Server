@@ -34,8 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
 
     //@NamedQuery(name="insertClient", query="INSERT INTO Client l WHERE l.login=:login AND l.password=:password"),
 
-    //@NamedQuery(name = "postLoginClient", query = "SELECT l.type, l.commercial.id, u.id, u.email, u.fullName, u.status, u.privilege, u.lastPasswordChange FROM Client l, User u WHERE u.user.id=:l.client.id")
-
 })
 
 @Entity
@@ -46,7 +44,8 @@ public class Client extends User {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @OneToMany(cascade = ALL, mappedBy = "client")
+    @XmlTransient
+    @OneToMany(cascade = ALL, mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Evento> events;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -124,7 +123,7 @@ public class Client extends User {
     public int hashCode() {
         int hash = 7;
         hash = 37 * hash + Objects.hashCode(this.type);
-        hash = 37 * hash + Objects.hashCode(this.events);
+       // hash = 37 * hash + Objects.hashCode(this.events);
         hash = 37 * hash + Objects.hashCode(this.commercial);
         return hash;
     }

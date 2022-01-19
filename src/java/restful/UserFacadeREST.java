@@ -13,6 +13,7 @@ import entities.User;
 import entities.UserStatus;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.logging.Level;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.logging.Logger;
+import javax.mail.MessagingException;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -115,48 +117,50 @@ public class UserFacadeREST extends AbstractFacade<User> {
                     .setParameter("login", user.getLogin()).setParameter("password", key)
                     .getResultList();
             //Query query = em.getNamedQuery("login").setParameter("log", user.getLogin()).setParameter("pass", password);
+            //hacer q la contraseña nunca vuelva al cliente llena 
+            user.setPassword(null);
+            if (user.getPrivilege() == Privilege.ADMIN) {
+            } else {
+                if (user.getStatus() == UserStatus.ENABLED) {
+                    LOGGER.info("User enabled");
+                    if (user instanceof Client) {
+                        LOGGER.info("The User is a client");
+                        User cli = new Client();
+                        cli = user;
+                        return cli;
+                    } else if (user instanceof Commercial) {
+                        LOGGER.info("The User is a commercial");
+                        User com = new Commercial();
+                        com = user;
+                        return com;
+                    }
+                } else {
+                    LOGGER.info("User disabled");
+                    user = null;
+                }
+            }
         } catch (Exception e) {
             LOGGER.severe("Error finding user."
                     + e.getLocalizedMessage());
             throw new InternalServerErrorException(e);
 
         }
-        //hacer q la contraseña nunca vuelva al cliente llena 
-        user.setPassword(null);
-        if (user.getPrivilege() == Privilege.ADMIN) {
-        } else {
-            if (user.getStatus() == UserStatus.ENABLED) {
-                LOGGER.info("User enabled");
-                if (user instanceof Client) {
-                    LOGGER.info("The User is a client");
-                    User cli = new Client();
-                    cli = user;
-                    return cli;
-                } else if (user instanceof Commercial) {
-                    LOGGER.info("The User is a commercial");
-                    User com = new Commercial();
-                    com = user;
-                    return com;
-                }
-            } else {
-                LOGGER.info("User disabled");
-            }
-        }
         // si no esta bn devuelve user vacio / REVISAR 
         return user;
     }
 
     @GET
-    @Path("resetPassword/{user}")
-    public void resetPasswordByLogin(@PathParam("user") User user)
+    @Path("resetPassword/{log}")
+    public void resetPasswordByLogin(@PathParam("log") String log)
             throws InternalServerErrorException {
         String newKey;
         String safeKey;
+        User user;
         try {
             //FIND USER BY LOGIN
             LOGGER.info("Finding user");
-            user = (User) em.createNamedQuery("findUserByLogin")
-                    .setParameter("login", user.getLogin())
+            user = (User) em.createNamedQuery("resetPasswordByLogin")
+                    .setParameter("login", log)
                     .getSingleResult();
             if (user != null) {
                 //GENERATE RANDOM PASSWORD IF USER EXISTS
@@ -167,24 +171,28 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 safeKey = Hashing.cifrarTexto(newKey);
                 //UPDATE USER PASSWORD ON DATABASE
                 user.setPassword(safeKey);
-                super.edit(user);
+                //super.edit(user);
             }
         } catch (Exception e) {
-            LOGGER.severe("Error finding user."
+            LOGGER.severe("Error on password reset "
                     + e.getLocalizedMessage());
             throw new InternalServerErrorException(e);
-
         }
     }
 
     @PUT
     @Path("updatePassword/[user]")
     @Consumes({MediaType.APPLICATION_XML})
-    public void updatePass(@PathParam("user") User user) {
-        byte[] key = DatatypeConverter.parseHexBinary(user.getPassword());
-        String descifrado = new String(DecryptASim.decrypt(key), StandardCharsets.UTF_8);
-        user.setPassword(Hashing.cifrarTexto(descifrado));
-        Email.sendPasswordChange(user.getEmail());
+    public void updatePass(@PathParam("user") User user
+    ) {
+        try {
+            byte[] key = DatatypeConverter.parseHexBinary(user.getPassword());
+            String descifrado = new String(DecryptASim.decrypt(key), StandardCharsets.UTF_8);
+            user.setPassword(Hashing.cifrarTexto(descifrado));
+            Email.sendPasswordChange(user.getEmail());
+        } catch (MessagingException ex) {
+            Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+        }
         super.edit(user);
     }
 

@@ -29,7 +29,7 @@ public class Email {
 
     private static final Logger LOGGER = Logger.getLogger("package.class");
     private static final ResourceBundle configFile = ResourceBundle.getBundle("cypher.config");
-    private static final ResourceBundle mailConfig = ResourceBundle.getBundle("cypher.config");
+    private static final ResourceBundle mailConfig = ResourceBundle.getBundle("cypher.mail");
     
     // Credenciales y datos de servicio
     private static final String smtp = configFile.getString("HOST");
@@ -41,10 +41,10 @@ public class Email {
     private static final String subjectReset = mailConfig.getString("SUBJECTRESET");
     private static final String subjectChange = mailConfig.getString("SUBJECTCHANGE");
     private static final String text1 = mailConfig.getString("BODY1");
-    private static final String text2 = mailConfig.getString("BODY1");    
-    private static final String cambioPassword = configFile.getString("CAMBIOPASSWORD");
+    private static final String text2 = mailConfig.getString("BODY2");    
+    private static final String cambioPassword = mailConfig.getString("CAMBIOPASSWORD");
 
-    public static void sendPasswordReset(String receiver, String key) {
+    public static void sendPasswordReset(String receiver, String key) throws MessagingException {
 
         DecryptSim decrypt = new DecryptSim();
         
@@ -57,8 +57,6 @@ public class Email {
         //convertir byte to String para usarla 
         String userF = new String(usr2);
         String passF = new String(pass2);
-
-        
         
         LOGGER.info("Preparando conexión a servicio de correo");
         Properties props = new Properties();
@@ -75,36 +73,32 @@ public class Email {
                 new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, passF);
+                return new PasswordAuthentication(userF, passF);
             }
         });
-        try {
             LOGGER.info("Preparando mensaje");
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user));
+            message.setFrom(new InternetAddress(userF));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
             message.setSubject(subjectReset);
             LOGGER.info("Cabecera de mensaje lista");
             Multipart multipart = new MimeMultipart();
-            MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.setContent(text1, "text/html");
-            multipart.addBodyPart(mimeBodyPart);
+//            MimeBodyPart mimeBodyPart = new MimeBodyPart();
+//            mimeBodyPart.setContent(text1, "text/html");
+//            multipart.addBodyPart(mimeBodyPart);
             MimeBodyPart mimeBodyPart2 = new MimeBodyPart();
             mimeBodyPart2.setContent(key, "text/html");
             multipart.addBodyPart(mimeBodyPart2);
-            MimeBodyPart mimeBodyPart3 = new MimeBodyPart();
-            mimeBodyPart3.setContent(text2, "text/html");
-            multipart.addBodyPart(mimeBodyPart3);
-            message.setContent(multipart);
+//            MimeBodyPart mimeBodyPart3 = new MimeBodyPart();
+//            mimeBodyPart3.setContent(text2, "text/html");
+//            multipart.addBodyPart(mimeBodyPart3);
+//            message.setContent(multipart);
             LOGGER.info("Cuerpo de mensaje listo");
             Transport.send(message);
             LOGGER.info("Mensaje enviandose");
-        } catch (MessagingException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-        }
     }
     
-    public static void sendPasswordChange(String receiver) {
+    public static void sendPasswordChange(String receiver) throws MessagingException {
 
         DecryptSim decrypt = new DecryptSim();
         
@@ -117,8 +111,6 @@ public class Email {
         //convertir byte to String para usarla 
         String userF = new String(usr2);
         String passF = new String(pass2);
-
-        
         
         LOGGER.info("Preparando conexión a servicio de correo");
         Properties props = new Properties();
@@ -135,10 +127,9 @@ public class Email {
                 new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, passF);
+                return new PasswordAuthentication(userF, passF);
             }
         });
-        try {
             LOGGER.info("Preparando mensaje");
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
@@ -153,8 +144,5 @@ public class Email {
             LOGGER.info("Cuerpo de mensaje listo");
             Transport.send(message);
             LOGGER.info("Mensaje enviandose");
-        } catch (MessagingException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-        }
     }
 }

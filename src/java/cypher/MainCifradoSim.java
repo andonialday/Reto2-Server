@@ -28,7 +28,7 @@ public class MainCifradoSim {
 
     public static void main(String[] args) {
         MainCifradoSim cif = new MainCifradoSim();
-        byte[] cifrado = cif.cifrarTexto(key, "Abcd*1234");
+        byte[] cifrado = cif.cifrarTexto(key, "rentalg1c@gmail.com");
         String mensajeCifrado = DatatypeConverter.printHexBinary(cifrado);
         System.out.println(mensajeCifrado);
         byte[] descifrado = cif.decryptSim(cifrado);

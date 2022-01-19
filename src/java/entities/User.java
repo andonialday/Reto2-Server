@@ -27,6 +27,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Clase con los parámetros para la creación y gestión de usuarios
@@ -34,17 +35,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jaime San Sebastián y Enaitz Izagirre
  */
 @NamedQueries({
-    //@NamedQuery(name="findUserByLogin", query="SELECT u FROM User u WHERE u.login=:login AND u.password=:password AND u.status IS 'ENABLED'"),
+    @NamedQuery(name="findUserByLogin", query="SELECT u FROM User u WHERE u.login=:login AND u.password=:password AND u.status IS 'ENABLED'"),
 
-    //@NamedQuery(name = "postLoginUser", query = "SELECT u.id, u.email, u.fullName, u.status, u.privilege, u.lastPasswordChange FROM User u"),
-
-    @NamedQuery(name = "resetPasswordByLogin", query = "SELECT u.login FROM User u")
-
+    @NamedQuery(name = "resetPasswordByLogin", query = "SELECT u FROM User u WHERE u.login=:login")
 })
 
 @NamedNativeQueries({
     @NamedNativeQuery(name = "login", query = "CALL login(:log,:pass)")
-
 })
 
 @Entity
@@ -227,6 +224,7 @@ public class User implements Serializable {
      *
      * @return los ultimos inicios de sesion del usuario
      */
+    @XmlTransient
     public Set<SignIn> getSignIns() {
         return signIns;
     }
@@ -254,9 +252,9 @@ public class User implements Serializable {
         hash = 19 * hash + Objects.hashCode(this.fullName);
         hash = 19 * hash + Objects.hashCode(this.status);
         hash = 19 * hash + Objects.hashCode(this.privilege);
-        hash = 19 * hash + Objects.hashCode(this.password);
+      //  hash = 19 * hash + Objects.hashCode(this.password);
         hash = 19 * hash + Objects.hashCode(this.lastPasswordChange);
-        hash = 19 * hash + Objects.hashCode(this.signIns);
+     //   hash = 19 * hash + Objects.hashCode(this.signIns);
         return hash;
     }
 
