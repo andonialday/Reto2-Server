@@ -52,6 +52,8 @@ public class Evento implements Serializable {
     private Date dateEnd;
 
     private String description;
+    
+    private String name;
 
     @ManyToOne
     private Client client;
@@ -122,6 +124,22 @@ public class Evento implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    /**
+     * Método Getter para obtener el Name <i>(Nombre)</i> del Evento
+     * @return Name <i>(Nombre)</i> del Evento
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Método Setter para asignar el Name <i>(Nombre)</i> al Evento
+     * @param name <i>(Nombre)</i> a asignar al Evento
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
     
     /**
      * Método Getter para obtener el Client <i>(Client)</i> "propietario" del Evento
@@ -159,18 +177,19 @@ public class Evento implements Serializable {
 
     @Override
     public String toString() {
-        return "Event{" + "id=" + id + ", dateStart=" + dateStart + ", dateEnd=" + dateEnd + ", description=" + description + ", client=" + client + ", equipments=" + equipments + '}';
+        return "Evento{" + "id=" + id + ", dateStart=" + dateStart + ", dateEnd=" + dateEnd + ", description=" + description + ", name=" + name + ", client=" + client + ", equipments=" + equipments + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 13 * hash + Objects.hashCode(this.id);
-        hash = 13 * hash + Objects.hashCode(this.dateStart);
-        hash = 13 * hash + Objects.hashCode(this.dateEnd);
-        hash = 13 * hash + Objects.hashCode(this.description);
-        hash = 13 * hash + Objects.hashCode(this.client);
-        hash = 13 * hash + Objects.hashCode(this.equipments);
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.id);
+        hash = 41 * hash + Objects.hashCode(this.dateStart);
+        hash = 41 * hash + Objects.hashCode(this.dateEnd);
+        hash = 41 * hash + Objects.hashCode(this.description);
+        hash = 41 * hash + Objects.hashCode(this.name);
+        hash = 41 * hash + Objects.hashCode(this.client);
+        hash = 41 * hash + Objects.hashCode(this.equipments);
         return hash;
     }
 
@@ -187,6 +206,9 @@ public class Evento implements Serializable {
         }
         final Evento other = (Evento) obj;
         if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
