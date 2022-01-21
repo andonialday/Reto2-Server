@@ -39,7 +39,6 @@ public class DecryptASim {
         PrivateKey privKey = null;
         try {
             BufferedReader reader = null;
-            LOGGER.info(DecryptASim.class.getPackage().toString());
             reader = new BufferedReader(new FileReader(pathPrivate));
             String privK = reader.readLine();
             PKCS8EncodedKeySpec pk = new PKCS8EncodedKeySpec(DatatypeConverter.parseHexBinary(privK));
@@ -58,10 +57,9 @@ public class DecryptASim {
         try {
             PrivateKey privKey = priv();
             Cipher cipher = Cipher.getInstance(RSA);
-
             cipher.init(Cipher.DECRYPT_MODE, privKey);
+            LOGGER.info("Desencriptando");
             result = cipher.doFinal(cipherText);
-
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
             Logger.getLogger(DecryptASim.class.getName()).log(Level.SEVERE, null, ex);
         }

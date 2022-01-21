@@ -105,7 +105,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("signIn/{login}/{password}")
     @Produces({MediaType.APPLICATION_XML})
-    public User signIn(@PathParam("user") String login, String password) throws InternalServerErrorException {
+    public User signIn(@PathParam("login") String login, @PathParam("password") String password) throws InternalServerErrorException {
         User user;
         try {
             LOGGER.info("Finding user");
@@ -140,8 +140,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 }
             }
         } catch (Exception e) {
-            LOGGER.severe("Error finding user."
-                    + e.getLocalizedMessage());
+            LOGGER.severe("Error finding user." + e.getLocalizedMessage());
             throw new InternalServerErrorException(e);
 
         }
@@ -170,7 +169,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 Email.sendPasswordReset(user.getEmail(), newKey);
                 //HASH PASSWORD
                 safeKey = Hashing.cifrarTexto(newKey);
-                
+
                 //UPDATE USER PASSWORD ON DATABASE
                 user.setPassword(safeKey);
                 //super.edit(user);
