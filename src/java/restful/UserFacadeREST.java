@@ -103,18 +103,18 @@ public class UserFacadeREST extends AbstractFacade<User> {
     }
 
     @GET
-    @Path("signIn/{user}")
+    @Path("signIn/{login}/{password}")
     @Produces({MediaType.APPLICATION_XML})
-    public User signIn(@PathParam("user") User user) throws InternalServerErrorException {
-
+    public User signIn(@PathParam("user") String login, String password) throws InternalServerErrorException {
+        User user;
         try {
             LOGGER.info("Finding user");
-            byte[] pass = DatatypeConverter.parseHexBinary(user.getPassword());
+            byte[] pass = DatatypeConverter.parseHexBinary(password);
             String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
             //Hasear la contraseña con MD5
             String key = Hashing.cifrarTexto(descifrado);
             user = (User) em.createNamedQuery("findUserByLogin")
-                    .setParameter("login", user.getLogin()).setParameter("password", key)
+                    .setParameter("login", login).setParameter("password", key)
                     .getResultList();
             //Query query = em.getNamedQuery("login").setParameter("log", user.getLogin()).setParameter("pass", password);
             //hacer q la contraseña nunca vuelva al cliente llena 
