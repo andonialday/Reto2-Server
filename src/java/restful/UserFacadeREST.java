@@ -105,7 +105,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("signIn/{user}")
     @Produces({MediaType.APPLICATION_XML})
-    public User SignIn(@PathParam("user") User user) throws InternalServerErrorException {
+    public User signIn(@PathParam("user") User user) throws InternalServerErrorException {
 
         try {
             LOGGER.info("Finding user");
@@ -151,6 +151,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
     @GET
     @Path("resetPassword/{log}")
+    @Produces({MediaType.APPLICATION_XML})
     public void resetPasswordByLogin(@PathParam("log") String log)
             throws InternalServerErrorException {
         String newKey;
@@ -169,6 +170,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 Email.sendPasswordReset(user.getEmail(), newKey);
                 //HASH PASSWORD
                 safeKey = Hashing.cifrarTexto(newKey);
+                
                 //UPDATE USER PASSWORD ON DATABASE
                 user.setPassword(safeKey);
                 //super.edit(user);
