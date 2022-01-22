@@ -29,6 +29,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
+import javax.persistence.StoredProcedureQuery;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -113,36 +116,38 @@ public class UserFacadeREST extends AbstractFacade<User> {
             String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
             //Hasear la contraseña con MD5
             String key = Hashing.cifrarTexto(descifrado);
-            user = (User) em.createNamedQuery("findUserByLogin")
-                    .setParameter("login", login).setParameter("password", key)
-                    .getResultList();
-            //Query query = em.getNamedQuery("login").setParameter("log", user.getLogin()).setParameter("pass", password);
-            //hacer q la contraseña nunca vuelva al cliente llena 
-            user.setPassword(null);
-            if (user.getPrivilege() == Privilege.ADMIN) {
-            } else {
-                if (user.getStatus() == UserStatus.ENABLED) {
-                    LOGGER.info("User enabled");
-                    if (user instanceof Client) {
-                        LOGGER.info("The User is a client");
-                        User cli = new Client();
-                        cli = user;
-                        return cli;
-                    } else if (user instanceof Commercial) {
-                        LOGGER.info("The User is a commercial");
-                        User com = new Commercial();
-                        com = user;
-                        return com;
+            user = (User) em.createNamedQuery("signInQuery").setParameter("loginId", login).setParameter("key", key).getSingleResult();
+            if (user != null) {
+                LOGGER.info("User found!!");
+                StoredProcedureQuery query = em.createStoredProcedureQuery("signInPA").setParameter("id", user.getId());
+                //.registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN).bindValue(user.getId());
+                LOGGER.info("Initianing post-login procedure");
+                query.execute();
+                //hacer q la contraseña nunca vuelva al cliente llena
+                user.setPassword(null);
+                if (user.getPrivilege() != Privilege.ADMIN) {
+                    if (user.getStatus() == UserStatus.ENABLED) {
+                        LOGGER.info("User enabled");
+                        if (user instanceof Client) {
+                            LOGGER.info("The User is a client");
+                            User cli = new Client();
+                            cli = user;
+                            return cli;
+                        } else if (user instanceof Commercial) {
+                            LOGGER.info("The User is a commercial");
+                            User com = new Commercial();
+                            com = user;
+                            return com;
+                        }
+                    } else {
+                        LOGGER.info("User disabled");
+                        user = null;
                     }
-                } else {
-                    LOGGER.info("User disabled");
-                    user = null;
                 }
             }
         } catch (Exception e) {
             LOGGER.severe("Error finding user." + e.getLocalizedMessage());
             throw new InternalServerErrorException(e);
-
         }
         // si no esta bn devuelve user vacio / REVISAR 
         return user;

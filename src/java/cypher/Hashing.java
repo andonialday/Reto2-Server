@@ -26,7 +26,7 @@ public class Hashing {
         MessageDigest messageDigest;
         String hashedText = null;
         try {
-            LOGGER.info("Initiating new password security saving");
+            LOGGER.info("Initiating Password security Hashing");
             // Obtén una instancia de MessageDigest que usa MD5 (estaba en SHA)
             messageDigest = MessageDigest.getInstance("MD5");
             // Convierte el texto en un array de bytes 
@@ -36,7 +36,7 @@ public class Hashing {
             // Calcula el resumen (función digest)
             byte[] pass = messageDigest.digest();
             hashedText = new String(pass);
-            LOGGER.info("Password ready to be updated");
+            LOGGER.info("Password succesfully Hashed");
         } catch (NoSuchAlgorithmException e) {
         }
         return hashedText;

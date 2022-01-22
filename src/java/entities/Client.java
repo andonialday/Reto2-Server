@@ -74,6 +74,7 @@ public class Client extends User {
      *
      * @return los eventos de un cliente
      */
+    @XmlTransient
     public Set<Evento> getEvents() {
         return events;
     }

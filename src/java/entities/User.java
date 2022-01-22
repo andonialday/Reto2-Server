@@ -22,7 +22,11 @@ import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,14 +39,17 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Jaime San Sebastián y Enaitz Izagirre
  */
 @NamedQueries({
-    @NamedQuery(name="findUserByLogin", query="SELECT u FROM User u WHERE u.login=:login AND u.password=:password AND u.status IS 'ENABLED'"),
-
+    @NamedQuery(name = "signInQuery", query = "SELECT u FROM User u WHERE u.login=:loginId AND u.password=:key AND u.status IS 'ENABLED'")
+    ,
     @NamedQuery(name = "resetPasswordByLogin", query = "SELECT u FROM User u WHERE u.login=:login")
 })
-
-@NamedNativeQueries({
-    @NamedNativeQuery(name = "login", query = "CALL login(:log,:pass)")
-})
+@NamedStoredProcedureQueries(
+        @NamedStoredProcedureQuery(
+                name = "signInPA", procedureName = "login", parameters = {
+                    @StoredProcedureParameter(name = "id", type = Integer.class, mode = ParameterMode.IN)
+                }
+        )
+)
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -252,9 +259,9 @@ public class User implements Serializable {
         hash = 19 * hash + Objects.hashCode(this.fullName);
         hash = 19 * hash + Objects.hashCode(this.status);
         hash = 19 * hash + Objects.hashCode(this.privilege);
-      //  hash = 19 * hash + Objects.hashCode(this.password);
+        //  hash = 19 * hash + Objects.hashCode(this.password);
         hash = 19 * hash + Objects.hashCode(this.lastPasswordChange);
-     //   hash = 19 * hash + Objects.hashCode(this.signIns);
+        //   hash = 19 * hash + Objects.hashCode(this.signIns);
         return hash;
     }
 
