@@ -30,7 +30,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.persistence.ParameterMode;
-import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 import javax.xml.bind.DatatypeConverter;
 
@@ -119,8 +118,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             user = (User) em.createNamedQuery("signInQuery").setParameter("loginId", login).setParameter("key", key).getSingleResult();
             if (user != null) {
                 LOGGER.info("User found!!");
-                StoredProcedureQuery query = em.createStoredProcedureQuery("signInPA").setParameter("id", user.getId());
-                //.registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN).bindValue(user.getId());
+                StoredProcedureQuery query = em.createStoredProcedureQuery("reto2g1c.login").registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN).setParameter(1, user.getId());
                 LOGGER.info("Initianing post-login procedure");
                 query.execute();
                 //hacer q la contraseña nunca vuelva al cliente llena

@@ -9,6 +9,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -32,21 +36,21 @@ public class DecryptASim {
 
     private static final Logger LOGGER = Logger.getLogger("package.class");
     private static final ResourceBundle configFile = ResourceBundle.getBundle("cypher.config");
-    private static final String pathPrivate = configFile.getString("PRIVATEKEYPATH");
     private static String RSA = "RSA/ECB/PKCS1Padding";
 
     private static PrivateKey priv() {
         PrivateKey privKey = null;
-        try {
-            BufferedReader reader = null;
-            reader = new BufferedReader(new FileReader(pathPrivate));
-            String privK = reader.readLine();
+        String pathPrivate = configFile.getString("PRIVATEKEYPATH");
+        try {            
+            String privK = new String(Files.readAllBytes(Paths.get(DecryptASim.class.getResource(pathPrivate).toURI())));
             PKCS8EncodedKeySpec pk = new PKCS8EncodedKeySpec(DatatypeConverter.parseHexBinary(privK));
             privKey = KeyFactory.getInstance("RSA").generatePrivate(pk);
             LOGGER.info("Clave privada lista para descifrar");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DecryptASim.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException ex) {
+            Logger.getLogger(DecryptASim.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
             Logger.getLogger(DecryptASim.class.getName()).log(Level.SEVERE, null, ex);
         }
         return privKey;
