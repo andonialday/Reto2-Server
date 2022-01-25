@@ -19,17 +19,17 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entidad EventEquipment, representativa de la relacion entre os Evento y los
- Equipment, indicando la Quantity <i>(Cantidad de Equipment)</i> de la
+ * Equipment, indicando la Quantity <i>(Cantidad de Equipment)</i> de la
  * relación
  *
  * @author Andoni Alday , Aitor Perez
  */
-
-@NamedQueries ({
-    @NamedQuery (
-            name="findAssignedEquipment" , query="SELECT e FROM EventEquipment e WHERE e.event.id=:idEvent"),
-    @NamedQuery (
-            name="findAssignedEvent" , query="SELECT e FROM EventEquipment e WHERE e.equipment.id=:idEquipment")
+@NamedQueries({
+    @NamedQuery(
+            name = "findAssignedEquipment", query = "SELECT e FROM EventEquipment e WHERE e.event.id=:idEvent")
+    ,
+    @NamedQuery(
+            name = "findAssignedEvent", query = "SELECT e FROM EventEquipment e WHERE e.equipment.id=:idEquipment")
 })
 
 @Entity
@@ -130,8 +130,7 @@ public class EventEquipment implements Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 53 * hash + Objects.hashCode(this.event);
-        hash = 53 * hash + Objects.hashCode(this.equipment);
+        hash = 53 * hash + Objects.hashCode(this.eventEquipmentId);
         hash = 53 * hash + Objects.hashCode(this.quantity);
         return hash;
     }
@@ -148,6 +147,9 @@ public class EventEquipment implements Serializable {
             return false;
         }
         final EventEquipment other = (EventEquipment) obj;
+        if (!Objects.equals(this.eventEquipmentId, other.eventEquipmentId)) {
+            return false;
+        }
         if (!Objects.equals(this.event, other.event)) {
             return false;
         }
@@ -162,7 +164,7 @@ public class EventEquipment implements Serializable {
 
     @Override
     public String toString() {
-        return "EventEquipment{" + "event=" + event + ", equipment=" + equipment + ", quantity=" + quantity + '}';
+        return "EventEquipment{" + "eventEquipmentId=" + eventEquipmentId + ", event=" + event + ", equipment=" + equipment + ", quantity=" + quantity + '}';
     }
 
 }
