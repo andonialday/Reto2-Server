@@ -34,8 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
   @NamedQuery(
     name="findOrderAfterDate", query="SELECT q FROM Equipment q WHERE q.dateAdd>:date1"),
    @NamedQuery(
-    name="deleteOldEquip", query="DELETE FROM Equipment WHERE dateAdd=:date1"),
-  /* name="deleteOldEquip", query="DELETE FROM Equipment WHERE dateAdd<:current_date'-'365*year"),*/
+    name="deleteOldEquip", query="DELETE FROM Equipment q WHERE q.dateAdd<:date1"),
+   @NamedQuery(
+    name="updateCostIPC", query="UPDATE Equipment q SET q.cost = q.cost *:ratio"),
 })
 @Entity
 @Table(name = "EQUIPMENT", schema="reto2g1c")
@@ -47,6 +48,9 @@ public class Equipment implements Serializable {
     @GeneratedValue
     private Integer id;
     private String description;
+    private String name;
+
+    
     @Temporal (TemporalType.DATE)
     private Date dateAdd;
     private Double cost;
@@ -68,7 +72,20 @@ public class Equipment implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
+    /**
+     * Metodo Getter para obtener el Nombre del Equipamiento
+     * @return name del equipamiento
+     */
+    public String getName() {
+        return name;
+    }
+     /**
+     * Metodo Setter para definir el Nombre del Equipamiento
+     * @param name a asignar al Equipamiento
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
     /**
      * Metodo Getter para obtener la Descripcion del Equipamiento
      * @return Descripcion del Equipamiento
@@ -136,18 +153,18 @@ public class Equipment implements Serializable {
 
     @Override
     public String toString() {
-        return "Equipment{" + "id=" + id + ", description=" + description + ", dateAdd=" + dateAdd + ", cost=" + cost +
-               ", events=" + events + '}';
+        return "Equipment{" + "id=" + id + ", description=" + description + ", name=" + name + ", dateAdd=" + dateAdd + ", cost=" + cost + ", events=" + events + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        hash = 67 * hash + Objects.hashCode(this.description);
-        hash = 67 * hash + Objects.hashCode(this.dateAdd);
-        hash = 67 * hash + Objects.hashCode(this.cost);
-        hash = 67 * hash + Objects.hashCode(this.events);
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.description);
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + Objects.hashCode(this.dateAdd);
+        hash = 29 * hash + Objects.hashCode(this.cost);
+        hash = 29 * hash + Objects.hashCode(this.events);
         return hash;
     }
 
@@ -166,6 +183,9 @@ public class Equipment implements Serializable {
         if (!Objects.equals(this.description, other.description)) {
             return false;
         }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -180,7 +200,8 @@ public class Equipment implements Serializable {
         }
         return true;
     }
-   
+
+    
     
     
 }
