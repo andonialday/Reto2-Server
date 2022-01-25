@@ -56,7 +56,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void create(User entity) {
         byte[] pass = DatatypeConverter.parseHexBinary(entity.getPassword());
         String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
-        entity.setPassword(Hashing.cifrarTexto(descifrado));
+        entity.setPassword(DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado)));
         super.create(entity);
     }
 
@@ -66,7 +66,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     public void edit(@PathParam("id") Integer id, User entity) {
         byte[] pass = DatatypeConverter.parseHexBinary(entity.getPassword());
         String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
-        entity.setPassword(Hashing.cifrarTexto(descifrado));
+        entity.setPassword(DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado)));
         super.edit(entity);
     }
 
@@ -114,7 +114,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
             byte[] pass = DatatypeConverter.parseHexBinary(password);
             String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
             //Hasear la contraseña con MD5
-            String key = Hashing.cifrarTexto(descifrado);
+            String key = DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado));
             user = (User) em.createNamedQuery("signInQuery").setParameter("loginId", login).setParameter("key", key).getSingleResult();
             if (user != null) {
                 LOGGER.info("User found!!");
@@ -122,7 +122,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 LOGGER.info("Initianing post-login procedure");
                 query.execute();
                 //hacer q la contraseña nunca vuelva al cliente llena
-                user.setPassword(null);
                 if (user.getPrivilege() != Privilege.ADMIN) {
                     if (user.getStatus() == UserStatus.ENABLED) {
                         LOGGER.info("User enabled");
@@ -171,15 +170,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 //ENVIAR POR EMAIL
                 Email.sendPasswordReset(user.getEmail(), newKey);
                 //HASH PASSWORD
-                safeKey = Hashing.cifrarTexto(newKey);
+                safeKey = DatatypeConverter.printHexBinary(Hashing.cifrarTexto(newKey));
 
                 //UPDATE USER PASSWORD ON DATABASE
                 user.setPassword(safeKey);
                 //super.edit(user);
             }
-        } catch (Exception e) {
-            LOGGER.severe("Error on password reset "
-                    + e.getLocalizedMessage());
+        } catch (MessagingException e) {
+            LOGGER.severe("Error on password reset " + e.getLocalizedMessage());
             throw new InternalServerErrorException(e);
         }
     }
@@ -192,7 +190,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         try {
             byte[] key = DatatypeConverter.parseHexBinary(user.getPassword());
             String descifrado = new String(DecryptASim.decrypt(key), StandardCharsets.UTF_8);
-            user.setPassword(Hashing.cifrarTexto(descifrado));
+            user.setPassword(DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado)));
             Email.sendPasswordChange(user.getEmail());
         } catch (MessagingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);

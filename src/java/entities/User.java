@@ -192,6 +192,7 @@ public class User implements Serializable {
      *
      * @return la contraseña de un usuario
      */
+    @XmlTransient
     public String getPassword() {
         return password;
     }

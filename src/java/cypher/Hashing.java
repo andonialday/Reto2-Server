@@ -22,9 +22,9 @@ public class Hashing {
      * @param texto
      * @return 
      */
-    public static String cifrarTexto(String texto) {
+    public static byte[] cifrarTexto(String texto) {
         MessageDigest messageDigest;
-        String hashedText = null;
+        byte[] pass = null;
         try {
             LOGGER.info("Initiating Password security Hashing");
             // Obtén una instancia de MessageDigest que usa MD5 (estaba en SHA)
@@ -34,12 +34,11 @@ public class Hashing {
             // Actualiza el MessageDigest con el array de bytes 
             messageDigest.update(texto.getBytes());
             // Calcula el resumen (función digest)
-            byte[] pass = messageDigest.digest();
-            hashedText = new String(pass);
+            pass = messageDigest.digest();
             LOGGER.info("Password succesfully Hashed");
         } catch (NoSuchAlgorithmException e) {
         }
-        return hashedText;
+        return pass;
     }
 
 }

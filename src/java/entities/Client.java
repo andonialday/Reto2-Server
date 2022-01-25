@@ -124,7 +124,6 @@ public class Client extends User {
     public int hashCode() {
         int hash = 7;
         hash = 37 * hash + Objects.hashCode(this.type);
-       // hash = 37 * hash + Objects.hashCode(this.events);
         hash = 37 * hash + Objects.hashCode(this.commercial);
         return hash;
     }
