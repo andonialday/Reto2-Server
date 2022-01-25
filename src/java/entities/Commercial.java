@@ -18,26 +18,26 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-//@NamedQueries({
-//    @NamedQuery(
-//            name = "findEspecializationeEnable", query = "DELETE FROM Commercial m WHERE m.status=:'DISABLE' ")
-//    ,
-//    @NamedQuery(
-//            name = "findEspecializationeEnable", query = "SELECT m FROM Commercial m SET m.status=:'DISABLE' ")
-//    ,
-//    //Busca comerciales por su especializacion siempre y cuando este habilitado y los ordenada de forma ascendente por id 
-//    @NamedQuery(
-//            name = "findEspecializationeEnable", query = "SELECT m FROM Commercial m WHERE m.especialization:especialization AND m.status=:'ENABLED' ORDER BY m.id ASC")
-//    ,
-//    //Busca comerciales por su especializacion siempre y cuando este deshabilitado y los ordenada de forma ascendente por id 
-//    @NamedQuery(
-//            name = "findEspecializationeDisable", query = "SELECT m FROM Commercial m WHERE m.especialization:especialization AND m.status=:'DISABLED' ORDER BY m.id ASC ")
-//    ,
-//    //Busca comerciales por su especializacion ,tanto habilitado y deshabilitado y los ordenada de forma ascendente por id 
-//    @NamedQuery(
-//            name = "findEspecializationeAll", query = "SELECT m FROM Commercial m WHERE m.especialization:especialization ORDER BY m.id ASC")
-//
-//    })
+@NamedQueries({
+    @NamedQuery(
+            name = "findEspecializationeEnable", query = "DELETE FROM Commercial m WHERE m.status=:'DISABLE' ")
+    ,
+    @NamedQuery(
+            name = "findEspecializationeEnable", query = "SELECT m FROM Commercial m SET m.status=:'DISABLE' ")
+    ,
+    //Busca comerciales por su especializacion siempre y cuando este habilitado y los ordenada de forma ascendente por id 
+    @NamedQuery(
+            name = "findEspecializationeEnable", query = "SELECT m FROM Commercial m WHERE m.especialization:especialization AND m.status=:'ENABLED' ORDER BY m.id ASC")
+    ,
+    //Busca comerciales por su especializacion siempre y cuando este deshabilitado y los ordenada de forma ascendente por id 
+    @NamedQuery(
+            name = "findEspecializationeDisable", query = "SELECT m FROM Commercial m WHERE m.especialization:especialization AND m.status=:'DISABLED' ORDER BY m.id ASC ")
+    ,
+    //Busca comerciales por su especializacion ,tanto habilitado y deshabilitado y los ordenada de forma ascendente por id 
+    @NamedQuery(
+            name = "findEspecializationeAll", query = "SELECT m FROM Commercial m WHERE m.especialization:especialization ORDER BY m.id ASC")
+
+    })
 
 
 /**
@@ -104,7 +104,7 @@ public class Commercial extends User implements Serializable {
         int hash = 5;
         hash = super.hashCode() * hash;
         hash = 41 * hash + Objects.hashCode(this.especialization);
-        hash = 41 * hash + Objects.hashCode(this.clients);
+      
         return hash;
     }
 
