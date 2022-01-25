@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 @NamedQueries({
     @NamedQuery(
             name = "findEspecializationeEnable", query = "DELETE FROM Commercial m WHERE m.status=:'DISABLE' ")
@@ -36,19 +35,26 @@ import javax.xml.bind.annotation.XmlRootElement;
     //Busca comerciales por su especializacion ,tanto habilitado y deshabilitado y los ordenada de forma ascendente por id 
     @NamedQuery(
             name = "findEspecializationeAll", query = "SELECT m FROM Commercial m WHERE m.especialization:especialization ORDER BY m.id ASC")
+    ,
+    //INsertar commercial
+    @NamedQuery(name = "insertCommercial", query = "INSERT INTO Commercial m WHERE m.login=:login AND m.password=:password")
+        ,
+    //Actualiza la contraseña a todos los usuarios deshabilitados
+    @NamedQuery(
+    name="updateLoginCommercial", query="UPDATE Commercial m SET m.password = :password Where m.status=:'DISABLE'  "),
 
-    })
-
+})
 
 /**
  * Esta clase es un tipo de Usuario que extiende de User
+ *
  * @author Enaitz Izagirre
  */
 @Entity
 @Table(name = "COMMERCIAL", schema = "reto2g1c")
 @XmlRootElement
 public class Commercial extends User implements Serializable {
-    
+
     //La especializacion del Comercial se implementa mediante las opciones de la clase Especialization
     @Enumerated(EnumType.STRING)
     private Especialization especialization;
@@ -71,7 +77,7 @@ public class Commercial extends User implements Serializable {
      *
      * @return Devuelve el array de clientes
      */
-   // @XmlTransient
+    // @XmlTransient
     public Set<Client> getClients() {
         return (Set<Client>) clients;
     }
@@ -104,7 +110,7 @@ public class Commercial extends User implements Serializable {
         int hash = 5;
         hash = super.hashCode() * hash;
         hash = 41 * hash + Objects.hashCode(this.especialization);
-      
+
         return hash;
     }
 
