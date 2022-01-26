@@ -151,11 +151,24 @@ public class Equipment implements Serializable {
         this.events = events;
     }
 
+    /**
+     * Método ToString para obtener una representación en forma de texto de los
+     * datos de una instancia de Equipment
+     *
+     * @return la representacion en texto de los valores
+     * 
+     */
     @Override
     public String toString() {
         return "Equipment{" + "id=" + id + ", description=" + description + ", name=" + name + ", dateAdd=" + dateAdd + ", cost=" + cost + ", events=" + events + '}';
     }
 
+    /**
+     * Método para determinar un código identificativo de la instancia de Equipment
+     * en funcion de sus datos
+     *
+     * @return el código identificativo de la instancia
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -168,6 +181,11 @@ public class Equipment implements Serializable {
         return hash;
     }
 
+    /**
+     * Método para comparar si dos intancias del Equipamiento son iguales en función de sus datos
+     * @param obj segunda instancia a comparar
+     * @return boolean indicativo de la igualdad
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
