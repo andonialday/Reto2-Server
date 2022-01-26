@@ -6,6 +6,8 @@
 package restful;
 
 import entities.Client;
+import entities.Commercial;
+import entities.Privilege;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -20,6 +22,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.logging.Logger;
+import javax.ws.rs.InternalServerErrorException;
 
 /**
  *
@@ -87,7 +90,6 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
         return String.valueOf(super.count());
     }
     
-    /*
     @GET
     @Path("commercial/{idClient}")
     @Produces({MediaType.APPLICATION_XML})
@@ -124,7 +126,6 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
             throw new InternalServerErrorException(e);
         }
     }
-    */
     
     @Override
     protected EntityManager getEntityManager() {

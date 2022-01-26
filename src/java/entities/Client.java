@@ -14,6 +14,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,13 +27,17 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @NamedQueries({
     
-    //@NamedQuery(name="findClientCommercial", query="SELECT l.commercial FROM Client l WHERE l.id=:idClient"),
+    @NamedQuery(name="findClientByName", query="SELECT l FROM Client l WHERE l.fullName=:fullName ORDER BY l.fullName"),
+    
+    @NamedQuery(name="findClientByLogin", query="SELECT l FROM Client l WHERE l.login=:login ORDER BY l.login"),
+    
+    @NamedQuery(name="findClientByEmail", query="SELECT l FROM Client l WHERE l.email=:email ORDER BY l.email"),
+    
+    @NamedQuery(name="findClientByType", query="SELECT l FROM Client l WHERE l.type=:type ORDER BY l.type"),
+    
+    @NamedQuery(name="findClientCommercial", query="SELECT l.commercial FROM Client l WHERE l.id=:idClient"),
 
-    //@NamedQuery(name="findClientByType", query="SELECT l.client FROM Client l WHERE l.type=:type ORDER BY l.type"),
-
-    //@NamedQuery(name="deleteAllClientDisabled", query="DELETE FROM Client l WHERE l.client IS 'DISABLED'"),
-
-    //@NamedQuery(name="insertClient", query="INSERT INTO Client l WHERE l.login=:login AND l.password=:password"),
+    @NamedQuery(name="deleteAllClientDisabled", query="DELETE FROM Client l WHERE l.status = 'DISABLED'"),
 
 })
 
