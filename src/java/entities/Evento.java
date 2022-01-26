@@ -18,26 +18,33 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Andoni Alday
  */
-@NamedQueries ({
-    @NamedQuery (
-            name="findDateStartRange" , query="SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateStart<:date2"),
-    @NamedQuery (
-            name="findDateEndRange" , query="SELECT v FROM Evento v WHERE v.dateEnd>:date1 AND v.dateEnd<:date2"),
-    @NamedQuery (
-            name="findDateRange" , query="SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateEnd<:date2"),
-    @NamedQuery (
-            name="findDateStartRangeClient" , query="SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateStart<:date2 AND v.client.id=:idCli"),
-    @NamedQuery (
-            name="findDateEndRangeClient" , query="SELECT v FROM Evento v WHERE v.dateEnd>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli"),
-    @NamedQuery (
-            name="findDateRangeClient" , query="SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli"),
-    @NamedQuery (
-            name="findEventByClient" , query="SELECT v FROM Evento v WHERE v.client.id=:idCli"),
-    @NamedQuery (
-            name="deleteOldestEvents" , query="DELETE FROM Evento v WHERE v.dateEnd<:date")
+@NamedQueries({
+    @NamedQuery(
+            name = "findDateStartRange", query = "SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateStart<:date2")
+    ,
+    @NamedQuery(
+            name = "findDateEndRange", query = "SELECT v FROM Evento v WHERE v.dateEnd>:date1 AND v.dateEnd<:date2")
+    ,
+    @NamedQuery(
+            name = "findDateRange", query = "SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateEnd<:date2")
+    ,
+    @NamedQuery(
+            name = "findDateStartRangeClient", query = "SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateStart<:date2 AND v.client.id=:idCli")
+    ,
+    @NamedQuery(
+            name = "findDateEndRangeClient", query = "SELECT v FROM Evento v WHERE v.dateEnd>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli")
+    ,
+    @NamedQuery(
+            name = "findDateRangeClient", query = "SELECT v FROM Evento v WHERE v.dateStart>:date1 AND v.dateEnd<:date2 AND v.client.id=:idCli")
+    ,
+    @NamedQuery(
+            name = "findEventByClient", query = "SELECT v FROM Evento v WHERE v.client.id=:idCli")
+    ,
+    @NamedQuery(
+            name = "deleteOldestEvents", query = "DELETE FROM Evento v WHERE v.dateEnd<:date")
 })
 @Entity
-@Table(name = "EVENT", schema="reto2g1c")
+@Table(name = "EVENT", schema = "reto2g1c")
 @XmlRootElement
 public class Evento implements Serializable {
 
@@ -52,17 +59,18 @@ public class Evento implements Serializable {
     private Date dateEnd;
 
     private String description;
-    
+
     private String name;
 
     @ManyToOne
     private Client client;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private Set<EventEquipment> equipments;
 
     /**
      * Método Getter para obtener la ID del Evento
+     *
      * @return ID del Evento
      */
     public Integer getId() {
@@ -71,6 +79,7 @@ public class Evento implements Serializable {
 
     /**
      * Método Setter para definir la ID del Evento
+     *
      * @param id a asignar al Evento
      */
     public void setId(Integer id) {
@@ -78,7 +87,9 @@ public class Evento implements Serializable {
     }
 
     /**
-     * Método Getter para obtener la DateStart <i>(Fecha de Inicio)</i> del Evento
+     * Método Getter para obtener la DateStart <i>(Fecha de Inicio)</i> del
+     * Evento
+     *
      * @return DateStart <i>(Fecha de Inicio)</i> del Evento
      */
     public Date getDateStart() {
@@ -86,7 +97,9 @@ public class Evento implements Serializable {
     }
 
     /**
-     * Método Setter para definir la DateStart <i>(Fecha de Inicio)</i> del Evento
+     * Método Setter para definir la DateStart <i>(Fecha de Inicio)</i> del
+     * Evento
+     *
      * @param dateStart <i>(Fecha de Inicio)</i> a asignar al Evento
      */
     public void setDateStart(Date dateStart) {
@@ -95,6 +108,7 @@ public class Evento implements Serializable {
 
     /**
      * Método Getter para obtener la DateEnd <i>(Fecha de Fin)</i> del Evento
+     *
      * @return DateEnd <i>(Fecha de Fin)</i> del Evento
      */
     public Date getDateEnd() {
@@ -103,6 +117,7 @@ public class Evento implements Serializable {
 
     /**
      * Método Setter para asignar la DateEnd <i>(Fecha de Fin)</i> al Evento
+     *
      * @param dateEnd <i>(Fecha de Fin)</i> a asignar al Evento
      */
     public void setDateEnd(Date dateEnd) {
@@ -111,6 +126,7 @@ public class Evento implements Serializable {
 
     /**
      * Método Getter para obtener la Description <i>(Descripcion)</i> del Evento
+     *
      * @return Description <i>(Descripcion)</i> del Evento
      */
     public String getDescription() {
@@ -119,6 +135,7 @@ public class Evento implements Serializable {
 
     /**
      * Método Setter para asignar la Description <i>(Descripcion)</i> al Evento
+     *
      * @param description <i>(Descripcion)</i> a asignar al Evento
      */
     public void setDescription(String description) {
@@ -127,6 +144,7 @@ public class Evento implements Serializable {
 
     /**
      * Método Getter para obtener el Name <i>(Nombre)</i> del Evento
+     *
      * @return Name <i>(Nombre)</i> del Evento
      */
     public String getName() {
@@ -135,14 +153,17 @@ public class Evento implements Serializable {
 
     /**
      * Método Setter para asignar el Name <i>(Nombre)</i> al Evento
+     *
      * @param name <i>(Nombre)</i> a asignar al Evento
      */
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
-     * Método Getter para obtener el Client <i>(Client)</i> "propietario" del Evento
+     * Método Getter para obtener el Client <i>(Client)</i> "propietario" del
+     * Evento
+     *
      * @return Client<i>(Cliente)</i> "propietario" del Evento
      */
     @XmlTransient
@@ -151,15 +172,19 @@ public class Evento implements Serializable {
     }
 
     /**
-     * Método Setter para asignar el Client <i>(Client)</i> "propietario" al Evento
+     * Método Setter para asignar el Client <i>(Client)</i> "propietario" al
+     * Evento
+     *
      * @param client Client <i>(Cliente)</i> "propietario" a asignar al Evento
      */
     public void setClient(Client client) {
         this.client = client;
     }
-     
+
     /**
-     * Método Getter para obtener los Equipments <i>(Equipamientos empleados)</i> del Evento
+     * Método Getter para obtener los Equipments <i>(Equipamientos
+     * empleados)</i> del Evento
+     *
      * @return Equipments <i>(Equipamientos empleados)</i> del Evento
      */
     @XmlTransient
@@ -168,18 +193,33 @@ public class Evento implements Serializable {
     }
 
     /**
-     * Método Setter para asignar los Equipments <i>(Equipamientos empleados)</i> al Evento
-     * @param equipments Equipments <i>(Equipamientos empleados)</i> a asignar al Evento
+     * Método Setter para asignar los Equipments <i>(Equipamientos
+     * empleados)</i> al Evento
+     *
+     * @param equipments Equipments <i>(Equipamientos empleados)</i> a asignar
+     * al Evento
      */
     public void setEquipments(Set<EventEquipment> equipments) {
         this.equipments = equipments;
     }
 
+    /**
+     * Método ToString para obtener una representación en forma de texto de los
+     * datos de una instancia de Evento
+     *
+     * @return la representacion en texto de los valores
+     */
     @Override
     public String toString() {
         return "Evento{" + "id=" + id + ", dateStart=" + dateStart + ", dateEnd=" + dateEnd + ", description=" + description + ", name=" + name + ", client=" + client + ", equipments=" + equipments + '}';
     }
 
+    /**
+     * Método para determinar un código identificativo de la instancia de Evento
+     * en funcion de sus datos
+     *
+     * @return el código identificativo de la instancia
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -193,6 +233,11 @@ public class Evento implements Serializable {
         return hash;
     }
 
+    /**
+     * Método para comparar si dos intancias de Evento son iguales en función de sus datos
+     * @param obj segunda instancia a comparar
+     * @return boolean indicativo de la igualdad
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -228,5 +273,5 @@ public class Evento implements Serializable {
         }
         return true;
     }
-    
+
 }

@@ -127,6 +127,12 @@ public class EventEquipment implements Serializable {
         this.quantity = quantity;
     }
 
+    /**
+     * Método para determinar un código identificativo de la instancia de
+     * EventEquipment en funcion de sus datos
+     *
+     * @return el código identificativo de la instancia
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -135,6 +141,13 @@ public class EventEquipment implements Serializable {
         return hash;
     }
 
+    /**
+     * Método para comparar si dos intancias de EventEquipment son iguales en
+     * función de sus datos
+     *
+     * @param obj segunda instancia a comparar
+     * @return boolean indicativo de la igualdad
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -162,6 +175,12 @@ public class EventEquipment implements Serializable {
         return true;
     }
 
+    /**
+     * Método ToString para obtener una representación en forma de texto de los
+     * datos de una instancia de EventEquipment
+     *
+     * @return la representacion en texto de los valores
+     */
     @Override
     public String toString() {
         return "EventEquipment{" + "eventEquipmentId=" + eventEquipmentId + ", event=" + event + ", equipment=" + equipment + ", quantity=" + quantity + '}';
