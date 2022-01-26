@@ -142,8 +142,7 @@ public class EventEquipmentFacadeREST extends AbstractFacade<EventEquipment> {
      * Método para recibir peticiones GET - FindAll para obtener todas las
      * entradas de la entidad en la BBDD
      *
-     * @return los datos de la entrada que se buscaba en la BBDD, nulos si la
-     * entrada no existe
+     * @return todos los datos de la entradas en la BBDD
      */
     @GET
     @Override
