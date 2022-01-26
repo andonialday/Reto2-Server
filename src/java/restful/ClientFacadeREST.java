@@ -25,7 +25,8 @@ import java.util.logging.Logger;
 import javax.ws.rs.InternalServerErrorException;
 
 /**
- *
+ * Clase RESTful del cliente con las queries generadas por Hibernate
+ * 
  * @author Jaime San Sebastián
  */
 
@@ -90,6 +91,7 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
         return String.valueOf(super.count());
     }
     
+    //Query propia para encontrar el comercial de un cliente
     @GET
     @Path("commercial/{idClient}")
     @Produces({MediaType.APPLICATION_XML})
@@ -109,6 +111,7 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
         return commercial;
     }
         
+    //Query propia para eliminar todos los clientes que estén deshabilitados
     @DELETE
     @Path("client/{privilege}")
     @Produces({MediaType.APPLICATION_XML})

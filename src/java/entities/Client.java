@@ -25,22 +25,46 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jaime San Sebastián
  */
+
+//Definir todas las queries que vamos a necesitar
 @NamedQueries({
     
-    @NamedQuery(name="findClientByName", query="SELECT l FROM Client l WHERE l.fullName=:fullName ORDER BY l.fullName"),
+    //Ordenar todos los clientes por su nombre
+    @NamedQuery(name="findClientByName", 
+            query="SELECT l FROM Client l "
+                    + "WHERE l.fullName=:fullName ORDER BY l.fullName"),
     
-    @NamedQuery(name="findClientByLogin", query="SELECT l FROM Client l WHERE l.login=:login ORDER BY l.login"),
+    //Ordenar todos los clientes por su login
+    @NamedQuery(name="findClientByLogin", 
+            query="SELECT l FROM Client l "
+                    + "WHERE l.login=:login ORDER BY l.login"),
     
-    @NamedQuery(name="findClientByEmail", query="SELECT l FROM Client l WHERE l.email=:email ORDER BY l.email"),
+    //Ordenar todos los clientes por su email
+    @NamedQuery(name="findClientByEmail", 
+            query="SELECT l FROM Client l "
+                    + "WHERE l.email=:email ORDER BY l.email"),
     
-    @NamedQuery(name="findClientByType", query="SELECT l FROM Client l WHERE l.type=:type ORDER BY l.type"),
+    //Ordenar todos los clientes por su tipo
+    @NamedQuery(name="findClientByType", 
+            query="SELECT l FROM Client l "
+                    + "WHERE l.type=:type ORDER BY l.type"),
     
-    @NamedQuery(name="findClientCommercial", query="SELECT l.commercial FROM Client l WHERE l.id=:idClient"),
+    //Buscar el comercial del cliente
+    @NamedQuery(name="findClientCommercial", 
+            query="SELECT l.commercial FROM Client l "
+                    + "WHERE l.id=:idClient"),
 
-    @NamedQuery(name="deleteAllClientDisabled", query="DELETE FROM Client l WHERE l.status = 'DISABLED'"),
+    //Eliminar todos los clientes que estén deshabilitados
+    @NamedQuery(name="deleteAllClientDisabled", 
+            query="DELETE FROM Client l "
+                    + "WHERE l.status = 'DISABLED'"),
 
 })
 
+/**
+ * Definimos la clase con sus atributos y sus anotaciones
+ * 
+ */
 @Entity
 @Table(name = "CLIENT", schema = "reto2g1c")
 @XmlRootElement
@@ -94,7 +118,7 @@ public class Client extends User {
     }
 
     /**
-     * Método Geter para obtener el Comercial asignado a un cliente
+     * Método Getter para obtener el Comercial asignado a un cliente
      *
      * @return el comercial de un cliente
      */
@@ -113,17 +137,23 @@ public class Client extends User {
     }
 
     /**
-     *
-     * @return
+     * Método toString que convierte a String el objeto cliente
+     * 
+     * @return String
      */
     @Override
     public String toString() {
-        return "Client{" + "Type=" + type + ", events=" + events + ", commercial=" + commercial + '}';
+        return "Client{" + "Type=" + type 
+                + ", events=" + events 
+                + ", commercial=" + commercial + '}';
     }
 
     /**
-     *
-     * @return
+     * Método hashCode que complementa al método equals 
+     * y sirve para comparar los datos del objeto cliente.
+     * Devuelve un número entero.
+     * 
+     * @return int
      */
     @Override
     public int hashCode() {
@@ -134,9 +164,13 @@ public class Client extends User {
     }
 
     /**
-     *
+     * Método equals que compara los datos del objeto cliente, 
+     * para saber si son del mismo tipo y tienen los mismos datos.
+     * Nos devuelve el valor true si son iguales
+     * y el valor false si no lo son.
+     *  
      * @param obj
-     * @return
+     * @return boolean
      */
     @Override
     public boolean equals(Object obj) {
