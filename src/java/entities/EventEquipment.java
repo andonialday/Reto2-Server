@@ -11,16 +11,27 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Entidad EventEquipment, representativa de la relacion entre os Evento y los
- Equipment, indicando la Quantity <i>(Cantidad de Equipment)</i> de la
+ * Equipment, indicando la Quantity <i>(Cantidad de Equipment)</i> de la
  * relación
  *
  * @author Andoni Alday , Aitor Perez
  */
+@NamedQueries({
+    @NamedQuery(
+            name = "findAssignedEquipment", query = "SELECT e FROM EventEquipment e WHERE e.event.id=:idEvent")
+    ,
+    @NamedQuery(
+            name = "findAssignedEvent", query = "SELECT e FROM EventEquipment e WHERE e.equipment.id=:idEquipment")
+})
+
 @Entity
 @Table(name = "EVENTEQUIPMENT", schema = "reto2g1c")
 @XmlRootElement
@@ -29,10 +40,12 @@ public class EventEquipment implements Serializable {
     @EmbeddedId
     private EventEquipmentId eventEquipmentId;
 
+    @XmlTransient
     @ManyToOne
     @MapsId("eventId")
     private Evento event;
 
+    @XmlTransient
     @ManyToOne
     @MapsId("equipmentId")
     private Equipment equipment;
@@ -114,15 +127,27 @@ public class EventEquipment implements Serializable {
         this.quantity = quantity;
     }
 
+    /**
+     * Método para determinar un código identificativo de la instancia de
+     * EventEquipment en funcion de sus datos
+     *
+     * @return el código identificativo de la instancia
+     */
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 53 * hash + Objects.hashCode(this.event);
-        hash = 53 * hash + Objects.hashCode(this.equipment);
+        hash = 53 * hash + Objects.hashCode(this.eventEquipmentId);
         hash = 53 * hash + Objects.hashCode(this.quantity);
         return hash;
     }
 
+    /**
+     * Método para comparar si dos intancias de EventEquipment son iguales en
+     * función de sus datos
+     *
+     * @param obj segunda instancia a comparar
+     * @return boolean indicativo de la igualdad
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -135,6 +160,9 @@ public class EventEquipment implements Serializable {
             return false;
         }
         final EventEquipment other = (EventEquipment) obj;
+        if (!Objects.equals(this.eventEquipmentId, other.eventEquipmentId)) {
+            return false;
+        }
         if (!Objects.equals(this.event, other.event)) {
             return false;
         }
@@ -147,9 +175,15 @@ public class EventEquipment implements Serializable {
         return true;
     }
 
+    /**
+     * Método ToString para obtener una representación en forma de texto de los
+     * datos de una instancia de EventEquipment
+     *
+     * @return la representacion en texto de los valores
+     */
     @Override
     public String toString() {
-        return "EventEquipment{" + "event=" + event + ", equipment=" + equipment + ", quantity=" + quantity + '}';
+        return "EventEquipment{" + "eventEquipmentId=" + eventEquipmentId + ", event=" + event + ", equipment=" + equipment + ", quantity=" + quantity + '}';
     }
 
 }

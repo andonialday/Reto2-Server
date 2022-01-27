@@ -9,70 +9,83 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
- * Desarrollo de los metodos del restfull
+ * Servicio RestFul para genéricos para implementar por el resto de entidades
  *
- * @author Enaitz Izagirre
+ * @author Andoni Alday, Enaitz Izagirre, Aitor Pérez, Jaime SanSebastian
+ * @param <T>
  */
 public abstract class AbstractFacade<T> {
 
-    /**
-     * Entidad de la clase
-     */
-    private final Class<T> entityClass;
+    private Class<T> entityClass;
 
     /**
-     * Constructor de la clase
+     * Constructor del servicio
      *
-     * @param entityClass clase abstracta
+     * @param entityClass clase de la entidad para la que se van a usar los
+     * métodos genéricos
      */
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
     /**
-     * Generar el entity manager para gestionar la entidad
+     * Método para obtener el Gestor de Entidades encargado de convertir las
+     * múltiples peticiones recibidas por el servidor en consultas SQL
      *
-     * @return devuelve una entidad
+     * @return acceso al Gestor de Entidades
      */
     protected abstract EntityManager getEntityManager();
 
     /**
-     * Crea una nueva entidad
      *
-     * @param entity entidad de la clase
+     * @param entity
      */
     public void create(T entity) {
         getEntityManager().persist(entity);
     }
 
     /**
-     * Edita una entidad
-     * @param entity entidad de la clase
+     * Método para actualizar datos pertenecientes a la entidad en la BBDD
+     * mediante PUT - Edit
+     *
+     * @param entity datos actualizados a escribirse en la BBDD
      */
     public void edit(T entity) {
-        getEntityManager().merge(entity);
+        if (!getEntityManager().contains(entity)) {
+            getEntityManager().merge(entity);
+        }
+        getEntityManager().flush();
+
     }
 
     /**
-     * Elimina una entidad
-     * @param entity entidad de la clase
+     * Método para recibir peticiones de DELETE - Remove para eliminar datos
+     * pertenecientes a la entidad de la BBDD
+     *
+     * @param entity entrada a eliminar de la BBDD
      */
     public void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
     }
 
     /**
-     * Busca una entidad
-     * @param id Parametro del objeto de la entidad
-     * @return devuelve la entidad que encontro
+     * Método para recibir peticiones GET - Find para buscar entradas
+     * pertenecientes a la entidad específicas en la BBDD
+     *
+     * @param id identificador de la entrada de la que se quieren obtener los
+     * datos
+     * @return los datos de la entrada que se buscaba en la BBDD, nulos si la
+     * entrada no existe
      */
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
     }
 
     /**
-     * Busca todas las entidades en la lista
-     * @return Todas las entidades de la lista
+     * Método para recibir peticiones GET - FindAll para obtener todas las
+     * entradas de la entidad en la BBDD
+     *
+     * @return todos los datos de la entradas en la BBDD
      */
     public List<T> findAll() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
@@ -81,9 +94,13 @@ public abstract class AbstractFacade<T> {
     }
 
     /**
-     * Busca en la lista dentro del rango
-     * @param range rango introducirdo con minimo y maximo
-     * @return devuelve la lista resultante
+     * Método para obtener las peticiones GET - FindRange para obtener las
+     * entradas pertenecientes a la entidad con identificadores entre dos
+     * otorgados
+     *
+     * @param range rango en el que tienen que estar los identificadores de las
+     * entidades
+     * @return las entradas con identificadores entre los valores otorgados
      */
     public List<T> findRange(int[] range) {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
@@ -95,8 +112,10 @@ public abstract class AbstractFacade<T> {
     }
 
     /**
-     * Cuenta de la la lista 
-     * @return devuelve un numero con la cuenta
+     * Método para obtener las peticiones GET - Count para obtener la cantidad
+     * de entradas asociadas a la entidad existentes en la BBDD
+     *
+     * @return cantidad de entradas de la entidad en la BBDD
      */
     public int count() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
