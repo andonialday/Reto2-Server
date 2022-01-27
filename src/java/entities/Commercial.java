@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(
             name = "findEspecializationeAll", query = "SELECT m FROM Commercial m WHERE m.especialization:especialization ORDER BY m.id ASC")
     ,
-    //INsertar commercial
+    //Insertar commercial
     @NamedQuery(name = "insertCommercial", query = "INSERT INTO Commercial m WHERE m.login=:login AND m.password=:password")
         ,
     //Actualiza la contraseña a todos los usuarios deshabilitados
@@ -77,7 +77,7 @@ public class Commercial extends User implements Serializable {
      *
      * @return Devuelve el array de clientes
      */
-    // @XmlTransient
+    @XmlTransient
     public Set<Client> getClients() {
         return (Set<Client>) clients;
     }

@@ -8,6 +8,9 @@ package entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
+import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,15 +18,52 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Clase con los parámetros para la creación y gestión de usuarios
  *
- * @author Jaime San Sebastián y Enaitz Izaguirre
+ * @author Jaime San Sebastián y Enaitz Izagirre
+ */
+
+//Definir todas las queries que vamos a necesitar
+@NamedQueries({
+    
+    @NamedQuery(name = "signInQuery", 
+            query = "SELECT u FROM User u "
+                    + "WHERE u.login=:loginId AND u.password=:key AND u.status IS 'ENABLED'"),
+    
+    //Resetear la contraseña por el login del usuario
+    @NamedQuery(name = "resetPasswordByLogin", 
+            query = "SELECT u FROM User u "
+                    + "WHERE u.login=:login")
+})
+
+@NamedStoredProcedureQueries(
+        
+        @NamedStoredProcedureQuery(
+                name = "signInPA", procedureName = "login", parameters = {
+                    @StoredProcedureParameter(name = "id", type = Integer.class, mode = ParameterMode.IN)
+                }
+        )
+)
+
+/**
+ * Definimos la clase con sus atributos y sus anotaciones
+ * 
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -35,6 +75,7 @@ public class User implements Serializable {
     @GeneratedValue
     private Integer id;
 
+    @Column(unique = true)
     private String login;
     private String email;
     private String fullName;
@@ -48,6 +89,9 @@ public class User implements Serializable {
 
     @Temporal(TemporalType.DATE)
     private Date lastPasswordChange;
+
+    @OneToMany(cascade = ALL, mappedBy = "user")
+    private Set<SignIn> signIns;
 
     /**
      * Método Getter para obtener la ID del usuario
@@ -162,6 +206,7 @@ public class User implements Serializable {
      *
      * @return la contraseña de un usuario
      */
+    @XmlTransient
     public String getPassword() {
         return password;
     }
@@ -186,35 +231,76 @@ public class User implements Serializable {
     }
 
     /**
-     * Método Getter para obtener el momento del último cambio de contraseña del
-     * usuario
+     * Método Setter para determinar el momento del último cambio de contraseña
+     * del usuario
      *
-     * @param lastPasswordChange el cambio de contraseña de un usuario a
-     * establecer
+     * @param lastPasswordChange el momento del ultimo cambio de contraseña de
+     * un usuario a establecer
      */
     public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "id=" + id + ", login=" + login + ", email=" + email + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", password=" + password + ", lastPasswordChange=" + lastPasswordChange + '}';
+    /**
+     * Método Getter para obtener los ultimos inicios de sesion de un usuario
+     *
+     * @return los ultimos inicios de sesion del usuario
+     */
+    @XmlTransient
+    public Set<SignIn> getSignIns() {
+        return signIns;
     }
 
+    /**
+     * Método Setter para determinar los ultimos inicios de sesion de un usuario
+     *
+     * @param signIns los ultimos inicios de sesion del usuario
+     */
+    public void setSignIns(Set<SignIn> signIns) {
+        this.signIns = signIns;
+    }
+
+    /**
+     * Método toString que convierte a String el objeto usuario
+     * 
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", login=" + login + ", email=" + email + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", password=" + password + ", lastPasswordChange=" + lastPasswordChange + ", signIns=" + signIns + '}';
+    }
+
+    /**
+     * Método hashCode que complementa al método equals 
+     * y sirve para comparar los datos del objeto usuario.
+     * Devuelve un número entero.
+     * 
+     * @return int
+     */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 73 * hash + this.id;
-        hash = 73 * hash + Objects.hashCode(this.login);
-        hash = 73 * hash + Objects.hashCode(this.email);
-        hash = 73 * hash + Objects.hashCode(this.fullName);
-        hash = 73 * hash + Objects.hashCode(this.status);
-        hash = 73 * hash + Objects.hashCode(this.privilege);
-        hash = 73 * hash + Objects.hashCode(this.password);
-        hash = 73 * hash + Objects.hashCode(this.lastPasswordChange);
+        int hash = 5;
+        hash = 19 * hash + Objects.hashCode(this.id);
+        hash = 19 * hash + Objects.hashCode(this.login);
+        hash = 19 * hash + Objects.hashCode(this.email);
+        hash = 19 * hash + Objects.hashCode(this.fullName);
+        hash = 19 * hash + Objects.hashCode(this.status);
+        hash = 19 * hash + Objects.hashCode(this.privilege);
+        //  hash = 19 * hash + Objects.hashCode(this.password);
+        hash = 19 * hash + Objects.hashCode(this.lastPasswordChange);
+        //   hash = 19 * hash + Objects.hashCode(this.signIns);
         return hash;
     }
 
+    /**
+     * Método equals que compara los datos del objeto usuario, 
+     * para saber si son del mismo tipo y tienen los mismos datos.
+     * Nos devuelve el valor true si son iguales
+     * y el valor false si no lo son.
+     *  
+     * @param obj
+     * @return boolean
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -227,9 +313,6 @@ public class User implements Serializable {
             return false;
         }
         final User other = (User) obj;
-        if (this.id != other.id) {
-            return false;
-        }
         if (!Objects.equals(this.login, other.login)) {
             return false;
         }
@@ -242,6 +325,9 @@ public class User implements Serializable {
         if (!Objects.equals(this.password, other.password)) {
             return false;
         }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
         if (this.status != other.status) {
             return false;
         }
@@ -249,6 +335,9 @@ public class User implements Serializable {
             return false;
         }
         if (!Objects.equals(this.lastPasswordChange, other.lastPasswordChange)) {
+            return false;
+        }
+        if (!Objects.equals(this.signIns, other.signIns)) {
             return false;
         }
         return true;

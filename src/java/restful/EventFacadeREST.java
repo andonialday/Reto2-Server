@@ -5,7 +5,7 @@
  */
 package restful;
 
-import entities.Event;
+import entities.Evento;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,26 +26,26 @@ import javax.ws.rs.core.MediaType;
  */
 @Stateless
 @Path("entities.event")
-public class EventFacadeREST extends AbstractFacade<Event> {
+public class EventFacadeREST extends AbstractFacade<Evento> {
 
     @PersistenceContext(unitName = "Reto2G1cServerPU")
     private EntityManager em;
 
     public EventFacadeREST() {
-        super(Event.class);
+        super(Evento.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Event entity) {
+    public void create(Evento entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Event entity) {
+    public void edit(@PathParam("id") Integer id, Evento entity) {
         super.edit(entity);
     }
 
@@ -58,21 +58,21 @@ public class EventFacadeREST extends AbstractFacade<Event> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Event find(@PathParam("id") Integer id) {
+    public Evento find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Event> findAll() {
+    public List<Evento> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Event> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Evento> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

@@ -8,8 +8,9 @@ package entities;
 import java.io.Serializable;
 
 /**
- * Enumeración Type para el Cliente, indicando el tipo del mismo <i>(El cliente
- * puede ser un particular, una empresa, ...)</i>
+ * Enumeración Type para el Cliente, indicando el tipo del mismo.
+ * El cliente puede ser un particular, una asociación, 
+ * una empresa o una entidad pública
  *
  * @author Jaime San Sebastian
  */

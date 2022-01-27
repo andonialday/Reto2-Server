@@ -28,8 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "EQUIPMENT", schema="reto2g1c")
 @XmlRootElement
 public class Equipment implements Serializable {
-    
-    
+        
     @Id
     @GeneratedValue
     private Integer id;

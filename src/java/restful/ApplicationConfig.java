@@ -10,7 +10,7 @@ import javax.ws.rs.core.Application;
 
 /**
  * Configuracion de la aplicacion 
- * @author Enaitz Izagirre
+ * @author Andoni Alday, Enaitz Izagirre, Aitor Perez, Jaime San Sebastian
  */
 @javax.ws.rs.ApplicationPath("webresources")
 public class ApplicationConfig extends Application {
@@ -27,9 +27,10 @@ public class ApplicationConfig extends Application {
     }
 
     /**
-     * No modifique el método addRestResourceClasses(). 
-     * Se rellena automáticamente con todos los recursos definidos en el proyecto. 
-     * Si es necesario, comente llamar a este método en getClasses().
+     * Do not modify addRestResourceClasses() method.
+     * It is automatically populated with
+     * all resources defined in the project.
+     * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(restful.ClientFacadeREST.class);
@@ -39,5 +40,4 @@ public class ApplicationConfig extends Application {
         resources.add(restful.EventFacadeREST.class);
         resources.add(restful.UserFacadeREST.class);
     }
-
 }
