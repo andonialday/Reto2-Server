@@ -38,12 +38,22 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jaime San Sebastián y Enaitz Izagirre
  */
+
+//Definir todas las queries que vamos a necesitar
 @NamedQueries({
-    @NamedQuery(name = "signInQuery", query = "SELECT u FROM User u WHERE u.login=:loginId AND u.password=:key AND u.status IS 'ENABLED'")
-    ,
-    @NamedQuery(name = "resetPasswordByLogin", query = "SELECT u FROM User u WHERE u.login=:login")
+    
+    @NamedQuery(name = "signInQuery", 
+            query = "SELECT u FROM User u "
+                    + "WHERE u.login=:loginId AND u.password=:key AND u.status IS 'ENABLED'"),
+    
+    //Resetear la contraseña por el login del usuario
+    @NamedQuery(name = "resetPasswordByLogin", 
+            query = "SELECT u FROM User u "
+                    + "WHERE u.login=:login")
 })
+
 @NamedStoredProcedureQueries(
+        
         @NamedStoredProcedureQuery(
                 name = "signInPA", procedureName = "login", parameters = {
                     @StoredProcedureParameter(name = "id", type = Integer.class, mode = ParameterMode.IN)
@@ -51,6 +61,10 @@ import javax.xml.bind.annotation.XmlTransient;
         )
 )
 
+/**
+ * Definimos la clase con sus atributos y sus anotaciones
+ * 
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "USER", schema = "reto2g1c")
@@ -246,11 +260,23 @@ public class User implements Serializable {
         this.signIns = signIns;
     }
 
+    /**
+     * Método toString que convierte a String el objeto usuario
+     * 
+     * @return String
+     */
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", login=" + login + ", email=" + email + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", password=" + password + ", lastPasswordChange=" + lastPasswordChange + ", signIns=" + signIns + '}';
     }
 
+    /**
+     * Método hashCode que complementa al método equals 
+     * y sirve para comparar los datos del objeto usuario.
+     * Devuelve un número entero.
+     * 
+     * @return int
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -266,6 +292,15 @@ public class User implements Serializable {
         return hash;
     }
 
+    /**
+     * Método equals que compara los datos del objeto usuario, 
+     * para saber si son del mismo tipo y tienen los mismos datos.
+     * Nos devuelve el valor true si son iguales
+     * y el valor false si no lo son.
+     *  
+     * @param obj
+     * @return boolean
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

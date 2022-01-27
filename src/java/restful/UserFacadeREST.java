@@ -34,9 +34,11 @@ import javax.persistence.StoredProcedureQuery;
 import javax.xml.bind.DatatypeConverter;
 
 /**
- *
+ * Clase RESTful del cliente con las queries generadas por Hibernate
+ * 
  * @author Jaime San Sebastián y Enaitz Izagirre
  */
+
 @Stateless
 @Path("entities.user")
 public class UserFacadeREST extends AbstractFacade<User> {
@@ -150,6 +152,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
         return user;
     }
 
+    //Query propia para resetear la contraseña por el login
     @GET
     @Path("resetPassword/{log}")
     @Produces({MediaType.APPLICATION_XML})
