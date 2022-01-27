@@ -6,6 +6,8 @@
 package restful;
 
 import entities.Client;
+import entities.Commercial;
+import entities.Privilege;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,17 +21,22 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.logging.Logger;
+import javax.ws.rs.InternalServerErrorException;
 
 /**
- *
- * @author 2dam
+ * Clase RESTful del cliente con las queries generadas por Hibernate
+ * 
+ * @author Jaime San Sebastián
  */
+
 @Stateless
 @Path("entities.client")
 public class ClientFacadeREST extends AbstractFacade<Client> {
 
     @PersistenceContext(unitName = "Reto2G1cServerPU")
     private EntityManager em;
+    private static final Logger LOGGER = Logger.getLogger("package.class");
 
     public ClientFacadeREST() {
         super(Client.class);
@@ -37,14 +44,15 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
 
     @POST
     @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void create(Client entity) {
         super.create(entity);
+        //hashear la contraseña
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Integer id, Client entity) {
         super.edit(entity);
     }
@@ -57,21 +65,21 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public Client find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Client> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML})
     public List<Client> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
@@ -82,7 +90,46 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+    
+    //Query propia para encontrar el comercial de un cliente
+    @GET
+    @Path("commercial/{idClient}")
+    @Produces({MediaType.APPLICATION_XML})
+    public Commercial findClientCommercial(@PathParam("idClient") Integer idClient)
+        throws InternalServerErrorException{
+        Commercial commercial = null;
+        try{
+            LOGGER.info("Finding client commercial");
+            commercial = (Commercial) em.createNamedQuery("findClientCommercial")
+                    .setParameter("idClient", idClient)
+                    .getSingleResult();
+        }catch(Exception e){
+            LOGGER.severe("Error finding client commercial."
+                +e.getLocalizedMessage());
+            throw new InternalServerErrorException(e);
+        }
+        return commercial;
+    }
+        
+    //Query propia para eliminar todos los clientes que estén deshabilitados
+    @DELETE
+    @Path("client/{privilege}")
+    @Produces({MediaType.APPLICATION_XML})
+    public void deleteAllClientDisabled(@PathParam("privilege") Privilege privilege)
+        throws InternalServerErrorException{
+        Client client = null;
+        try{
+            LOGGER.info("Deleting all clients disabled");
+            client = (Client) em.createNamedQuery("deleteAllClientDisabled")
+                    .setParameter("privilege", privilege)
+                    .getSingleResult();
+        }catch(Exception e){
+            LOGGER.severe("Error deleting all clients disabled."
+                +e.getLocalizedMessage());
+            throw new InternalServerErrorException(e);
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
