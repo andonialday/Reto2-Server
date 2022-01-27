@@ -9,12 +9,16 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
- *
- * @author 2dam
+ * Configuracion de la aplicacion 
+ * @author Enaitz Izagirre
  */
 @javax.ws.rs.ApplicationPath("webresources")
 public class ApplicationConfig extends Application {
 
+    /**
+     * Toma el set de clases
+     * @return devuelve
+     */
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
@@ -23,10 +27,9 @@ public class ApplicationConfig extends Application {
     }
 
     /**
-     * Do not modify addRestResourceClasses() method.
-     * It is automatically populated with
-     * all resources defined in the project.
-     * If required, comment out calling this method in getClasses().
+     * No modifique el método addRestResourceClasses(). 
+     * Se rellena automáticamente con todos los recursos definidos en el proyecto. 
+     * Si es necesario, comente llamar a este método en getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(restful.ClientFacadeREST.class);
@@ -36,5 +39,5 @@ public class ApplicationConfig extends Application {
         resources.add(restful.EventFacadeREST.class);
         resources.add(restful.UserFacadeREST.class);
     }
-    
+
 }

@@ -6,6 +6,7 @@
 package restful;
 
 import entities.Commercial;
+import entities.Especialization;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -21,8 +22,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- *
- * @author 2dam
+ * Clase Restfull del commercial 
+ * @author Enaitz Izagirre
  */
 @Stateless
 @Path("entities.commercial")
@@ -31,6 +32,9 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
     @PersistenceContext(unitName = "Reto2G1cServerPU")
     private EntityManager em;
 
+    /**
+     * Constructor vacio de la clase
+     */
     public CommercialFacadeREST() {
         super(Commercial.class);
     }
@@ -47,9 +51,9 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
     }
 
     /**
-     * 
-     * @param id
-     * @param entity 
+     * Edita la entidad Comercial
+     * @param id del Commercial
+     * @param entity la entidad Commercial
      */
     @PUT
     @Path("{id}")
@@ -58,12 +62,21 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
         super.edit(entity);
     }
 
+     /**
+     * Elimina la entidad Comercial
+     * @param id del Commercial
+     */
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
         super.remove(super.find(id));
     }
 
+    /**
+     * Recoge la id del COmmercial
+     * @param id la id del Commercial
+     * @return devuelve el id encontrado
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
@@ -71,7 +84,10 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
         return super.find(id);
     }
 
-    // NO Usada / Modificada abajo 
+    /**
+     * busca todos los commerciales de la lista 
+     * @return Devuelve toda la lista de commerciales
+     */
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML})
@@ -80,7 +96,12 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
     }
 
     
-    // NO Usada 
+    /**
+     * Busca en el rango que le introduce de la lista de commerciales
+     * @param from rango minimo
+     * @param to rango maximo
+     * @return devuelve el rango
+     */ 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML})
@@ -88,7 +109,10 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
         return super.findRange(new int[]{from, to});
     }
 
-    // NO Usada
+    /**
+     * Cuenta la cantidad de Commerciales
+     * @return Devuelve la cuenta 
+     */
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
@@ -96,12 +120,16 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
         return String.valueOf(super.count());
     }
 
-    // COmmercial no tiene tipe ???
+    /**
+     * Busca la especializacion
+     * @param especialization Enum del commercial para saber su especializacion
+     * @return evuelve una especializacion
+     */
     @GET
-    @Path("{tipe}")
+    @Path("{especialization}")
     @Produces({MediaType.APPLICATION_XML})
-    public Commercial find(@PathParam("tipe") String tipe) {
-        return super.find(tipe);
+    public Commercial find(@PathParam("especialization") Especialization especialization) {
+        return super.find(especialization);
     }
 
     @Override
