@@ -20,25 +20,28 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @NamedQueries({
     @NamedQuery(
-            name = "deleteCommercialDisable", query = "DELETE FROM Commercial m WHERE m.status='DISABLE' "),
+            name = "deleteCommercialDisable", query = "DELETE FROM Commercial m WHERE m.status='DISABLE' ")
+    ,
     @NamedQuery(
-            name = "findCommercialDisable", query = "SELECT m FROM Commercial m WHERE m.status='DISABLE' "),
+            name = "findCommercialDisable", query = "SELECT m FROM Commercial m WHERE m.status='DISABLE' ")
+    ,
     //Busca comerciales por su especializacion siempre y cuando este habilitado y los ordenada de forma ascendente por id 
     @NamedQuery(
-            name = "findEspecializationEnable", query = "SELECT m FROM Commercial m WHERE m.especialization=:especialization AND m.status='ENABLED' ORDER BY m.id ASC"),
+            name = "findEspecializationEnable", query = "SELECT m FROM Commercial m WHERE m.especialization=:especialization AND m.status='ENABLED' ORDER BY m.id ASC")
+    ,
     //Busca comerciales por su especializacion siempre y cuando este deshabilitado y los ordenada de forma ascendente por id 
     @NamedQuery(
-            name = "findEspecializationDisable", query = "SELECT m FROM Commercial m WHERE m.especialization=:especialization AND m.status='DISABLED' ORDER BY m.id ASC "),
+            name = "findEspecializationDisable", query = "SELECT m FROM Commercial m WHERE m.especialization=:especialization AND m.status='DISABLED' ORDER BY m.id ASC ")
+    ,
     //Busca comerciales por su especializacion ,tanto habilitado y deshabilitado y los ordenada de forma ascendente por id 
     @NamedQuery(
-            name = "findEspecializationAll", query = "SELECT m FROM Commercial m WHERE m.especialization=:especialization ORDER BY m.id ASC"),
+            name = "findEspecializationAll", query = "SELECT m FROM Commercial m WHERE m.especialization=:especialization ORDER BY m.id ASC")
+    ,
     //Insertar commercial
     //@NamedQuery(name = "insertCommercial", query = "INSERT INTO Commercial m VALUES()") ,
     //Actualiza la contraseña a todos los usuarios deshabilitados
     @NamedQuery(
-    name="updateLoginCommercial", query="UPDATE Commercial m SET m.password=:password Where m.status='DISABLE'  "),
-
-})
+            name = "updateLoginCommercial", query = "UPDATE Commercial m SET m.password=:password Where m.status='DISABLE'  "),})
 
 /**
  * Esta clase es un tipo de Usuario que extiende de User

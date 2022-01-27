@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("entities.commercial")
 public class CommercialFacadeREST extends AbstractFacade<Commercial> {
-    
+
     private static final Logger LOGGER = Logger.getLogger("package.class");
     @PersistenceContext(unitName = "Reto2G1cServerPU")
     private EntityManager em;
@@ -40,6 +40,15 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
      */
     public CommercialFacadeREST() {
         super(Commercial.class);
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
     }
 
     /**
@@ -130,25 +139,6 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
     }
 
     /**
-     * Busca la especializacion
-     *
-     * @param especialization Enum del commercial para saber su especializacion
-     * @return evuelve una especializacion
-     */
-    @GET
-    @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML})
-    public Commercial find(@PathParam("id") Integer id) {
-        LOGGER.info("Buscando un eventequipment en la BBDD");
-        return super.find(id);
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-
-    /**
      * Ejecuta la query findEspecializationeEnable
      *
      * @param especialization parametro que introduce el usuario para filtrar
@@ -164,7 +154,7 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
         List<Commercial> commercials = null;
 
         try {
-            commercials = em.createNamedQuery("findEspecializationEnable").setParameter("especialization", especialization).getResultList();
+            commercials = em.createNamedQuery("findEspecializationEnable").setParameter("especialization", Especialization.valueOf(especialization)).getResultList();
         } catch (Exception e) {
             LOGGER.info("Error query findEspecialization");
         }
@@ -187,7 +177,7 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
         List<Commercial> commercials = null;
 
         try {
-            commercials = em.createNamedQuery("findEspecializationDisable").setParameter("especialization", especialization).getResultList();
+            commercials = em.createNamedQuery("findEspecializationDisable").setParameter("especialization", Especialization.valueOf(especialization)).getResultList();
         } catch (Exception e) {
             LOGGER.info("Error query findEspecialization");
         }
@@ -200,14 +190,14 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
      * @return Devuelve los comerciales que cumplen con los requisitos de la query , en este caso por specializacion
      */
     @GET
-    @Path("especializationAll/{especializationAll}")
+    @Path("especializationAll/{especialization}")
     @Produces({MediaType.APPLICATION_XML})
     public List<Commercial> getEspecializationByCommercialAll(@PathParam("especialization") String especialization) {
 
         List<Commercial> commercials = null;
 
         try {
-            commercials = em.createNamedQuery("findEspecializationAll").setParameter("especialization", especialization).getResultList();
+            commercials = em.createNamedQuery("findEspecializationAll").setParameter("especialization", Especialization.valueOf(especialization)).getResultList();
         } catch (Exception e) {
             LOGGER.info("Error query findEspecialization");
         }
