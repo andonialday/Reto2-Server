@@ -23,5 +23,5 @@ public enum Privilege implements Serializable {
     /**
      * Opción 1 de enumeración, el usuario tiene los privilegio de usuario
      */
-    USER,
+    USER;
 }

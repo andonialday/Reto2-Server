@@ -14,6 +14,8 @@ import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,16 +26,30 @@ import javax.xml.bind.annotation.XmlTransient;
  * Entidad Equipment para gestion y control de Equipamiento
  * @author Aitor Perez
  */
+@NamedQueries({
+  @NamedQuery(
+    name="findCostRange", query="SELECT q FROM Equipment q WHERE q.cost>:cost1 and q.cost<:cost2"),
+  @NamedQuery(
+    name="findOrderPreviousDate", query="SELECT q FROM Equipment q WHERE q.dateAdd<:date1"),
+  @NamedQuery(
+    name="findOrderAfterDate", query="SELECT q FROM Equipment q WHERE q.dateAdd>:date1"),
+   @NamedQuery(
+    name="deleteOldEquip", query="DELETE FROM Equipment q WHERE q.dateAdd<:date1"),
+   @NamedQuery(
+    name="updateCostIPC", query="UPDATE Equipment q SET q.cost = q.cost *:ratio"),
+})
 @Entity
 @Table(name = "EQUIPMENT", schema="reto2g1c")
 @XmlRootElement
 public class Equipment implements Serializable {
-    
-    
+        
     @Id
     @GeneratedValue
     private Integer id;
     private String description;
+    private String name;
+
+    
     @Temporal (TemporalType.DATE)
     private Date dateAdd;
     private Double cost;
@@ -55,7 +71,20 @@ public class Equipment implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
+    /**
+     * Metodo Getter para obtener el Nombre del Equipamiento
+     * @return name del equipamiento
+     */
+    public String getName() {
+        return name;
+    }
+     /**
+     * Metodo Setter para definir el Nombre del Equipamiento
+     * @param name a asignar al Equipamiento
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
     /**
      * Metodo Getter para obtener la Descripcion del Equipamiento
      * @return Descripcion del Equipamiento
@@ -121,23 +150,41 @@ public class Equipment implements Serializable {
         this.events = events;
     }
 
+    /**
+     * Método ToString para obtener una representación en forma de texto de los
+     * datos de una instancia de Equipment
+     *
+     * @return la representacion en texto de los valores
+     * 
+     */
     @Override
     public String toString() {
-        return "Equipment{" + "id=" + id + ", description=" + description + ", dateAdd=" + dateAdd + ", cost=" + cost +
-               ", events=" + events + '}';
+        return "Equipment{" + "id=" + id + ", description=" + description + ", name=" + name + ", dateAdd=" + dateAdd + ", cost=" + cost + ", events=" + events + '}';
     }
 
+    /**
+     * Método para determinar un código identificativo de la instancia de Equipment
+     * en funcion de sus datos
+     *
+     * @return el código identificativo de la instancia
+     */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        hash = 67 * hash + Objects.hashCode(this.description);
-        hash = 67 * hash + Objects.hashCode(this.dateAdd);
-        hash = 67 * hash + Objects.hashCode(this.cost);
-        hash = 67 * hash + Objects.hashCode(this.events);
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.description);
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + Objects.hashCode(this.dateAdd);
+        hash = 29 * hash + Objects.hashCode(this.cost);
+        hash = 29 * hash + Objects.hashCode(this.events);
         return hash;
     }
 
+    /**
+     * Método para comparar si dos intancias del Equipamiento son iguales en función de sus datos
+     * @param obj segunda instancia a comparar
+     * @return boolean indicativo de la igualdad
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -151,6 +198,9 @@ public class Equipment implements Serializable {
         }
         final Equipment other = (Equipment) obj;
         if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
@@ -167,7 +217,8 @@ public class Equipment implements Serializable {
         }
         return true;
     }
-   
+
+    
     
     
 }
