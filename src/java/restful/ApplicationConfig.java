@@ -9,12 +9,16 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
- *
- * @author 2dam
+ * Configuracion de la aplicacion 
+ * @author Andoni Alday, Enaitz Izagirre, Aitor Perez, Jaime San Sebastian
  */
 @javax.ws.rs.ApplicationPath("webresources")
 public class ApplicationConfig extends Application {
 
+    /**
+     * Toma el set de clases
+     * @return devuelve
+     */
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();
@@ -36,5 +40,4 @@ public class ApplicationConfig extends Application {
         resources.add(restful.EventFacadeREST.class);
         resources.add(restful.UserFacadeREST.class);
     }
-    
 }
