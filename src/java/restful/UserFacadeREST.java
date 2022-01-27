@@ -153,9 +153,9 @@ public class UserFacadeREST extends AbstractFacade<User> {
     }
 
     //Query propia para resetear la contraseña por el login
-    @GET
+    @PUT
     @Path("resetPassword/{log}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Consumes({MediaType.APPLICATION_XML})
     public void resetPasswordByLogin(@PathParam("log") String log)
             throws InternalServerErrorException {
         String newKey;
