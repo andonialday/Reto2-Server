@@ -35,10 +35,9 @@ import javax.xml.bind.DatatypeConverter;
 
 /**
  * Clase RESTful del cliente con las queries generadas por Hibernate
- * 
+ *
  * @author Jaime San Sebastián y Enaitz Izagirre
  */
-
 @Stateless
 @Path("entities.user")
 public class UserFacadeREST extends AbstractFacade<User> {
@@ -204,6 +203,41 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    @GET
+    @Path("signUp/{login}/{email}/{password}/{name}")
+    @Produces({MediaType.APPLICATION_XML})
+    public User signUp(@PathParam("login") String login, @PathParam("email") String email, @PathParam("password") String password, @PathParam("name") String name) throws InternalServerErrorException {
+        User user = null;
+        LOGGER.info("Finding existing user with that login");
+        try {
+            user = (User) em.createNamedQuery("resetPasswordByLogin").setParameter("login", login).getSingleResult();
+        } catch (Exception ex) {
+            LOGGER.info("Login disponible");
+        }
+        if (user == null) {
+            try {
+                byte[] pass = DatatypeConverter.parseHexBinary(password);
+                String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
+                //Hasear la contraseña con MD5
+                String key = DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado));
+                StoredProcedureQuery query = em.createStoredProcedureQuery("reto2g1c.register")
+                        .registerStoredProcedureParameter(1, String.class, ParameterMode.IN).setParameter(1, login)
+                        .registerStoredProcedureParameter(2, String.class, ParameterMode.IN).setParameter(2, email)
+                        .registerStoredProcedureParameter(3, String.class, ParameterMode.IN).setParameter(3, name)
+                        .registerStoredProcedureParameter(4, String.class, ParameterMode.IN).setParameter(4, key);
+                LOGGER.info("Initianing post-login procedure");
+                query.execute();
+                user = (User) em.createNamedQuery("resetPasswordByLogin").setParameter("login", login).getSingleResult();
+            } catch (Exception ex) {
+                LOGGER.info("Login disponible");
+            }
+        } else {
+            LOGGER.info("Login on use");
+        }
+        // si no esta bn devuelve user vacio / REVISAR 
+        return user;
     }
 
 }

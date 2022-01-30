@@ -18,8 +18,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.NamedStoredProcedureQueries;
@@ -38,32 +36,22 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Jaime San Sebastián y Enaitz Izagirre
  */
-
 //Definir todas las queries que vamos a necesitar
 @NamedQueries({
-    
-    @NamedQuery(name = "signInQuery", 
+    @NamedQuery(name = "signInQuery",
             query = "SELECT u FROM User u "
-                    + "WHERE u.login=:loginId AND u.password=:key AND u.status IS 'ENABLED'"),
+            + "WHERE u.login=:loginId AND u.password=:key AND u.status IS 'ENABLED'")
+    ,
     
     //Resetear la contraseña por el login del usuario
-    @NamedQuery(name = "resetPasswordByLogin", 
+    @NamedQuery(name = "resetPasswordByLogin",
             query = "SELECT u FROM User u "
-                    + "WHERE u.login=:login")
+            + "WHERE u.login=:login")
 })
-
-@NamedStoredProcedureQueries(
-        
-        @NamedStoredProcedureQuery(
-                name = "signInPA", procedureName = "login", parameters = {
-                    @StoredProcedureParameter(name = "id", type = Integer.class, mode = ParameterMode.IN)
-                }
-        )
-)
 
 /**
  * Definimos la clase con sus atributos y sus anotaciones
- * 
+ *
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -262,7 +250,7 @@ public class User implements Serializable {
 
     /**
      * Método toString que convierte a String el objeto usuario
-     * 
+     *
      * @return String
      */
     @Override
@@ -271,10 +259,9 @@ public class User implements Serializable {
     }
 
     /**
-     * Método hashCode que complementa al método equals 
-     * y sirve para comparar los datos del objeto usuario.
-     * Devuelve un número entero.
-     * 
+     * Método hashCode que complementa al método equals y sirve para comparar
+     * los datos del objeto usuario. Devuelve un número entero.
+     *
      * @return int
      */
     @Override
@@ -293,11 +280,10 @@ public class User implements Serializable {
     }
 
     /**
-     * Método equals que compara los datos del objeto usuario, 
-     * para saber si son del mismo tipo y tienen los mismos datos.
-     * Nos devuelve el valor true si son iguales
-     * y el valor false si no lo son.
-     *  
+     * Método equals que compara los datos del objeto usuario, para saber si son
+     * del mismo tipo y tienen los mismos datos. Nos devuelve el valor true si
+     * son iguales y el valor false si no lo son.
+     *
      * @param obj
      * @return boolean
      */
