@@ -5,22 +5,30 @@
  */
 package restful;
 
+import cypher.DecryptASim;
+import cypher.Hashing;
 import entities.Commercial;
 import entities.Especialization;
+import entities.User;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * Clase Restfull del commercial
@@ -204,4 +212,40 @@ public class CommercialFacadeREST extends AbstractFacade<Commercial> {
         return commercials;
     }
 
+    
+    @GET
+    @Path("signUp/{login}/{email}/{password}/{name}/{espec}")
+    @Produces({MediaType.APPLICATION_XML})
+    public User signUp(@PathParam("login") String login, @PathParam("email") String email, @PathParam("password") String password, @PathParam("name") String name, @PathParam("espec") String espec) throws InternalServerErrorException {
+        User user = null;
+        LOGGER.info("Finding existing user with that login");
+        try {
+            user = (User) em.createNamedQuery("resetPasswordByLogin").setParameter("login", login).getSingleResult();
+        } catch (Exception ex) {
+            LOGGER.info("Login disponible");
+        }
+        if (user == null) {
+            try {
+                byte[] pass = DatatypeConverter.parseHexBinary(password);
+                String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
+                //Hasear la contraseña con MD5
+                String key = DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado));
+                // Añadiendo Commercial mediante procedimiento
+                StoredProcedureQuery query = em.createStoredProcedureQuery("reto2g1c.registerCommercial")
+                        .registerStoredProcedureParameter(1, String.class, ParameterMode.IN).setParameter(1, login)
+                        .registerStoredProcedureParameter(2, String.class, ParameterMode.IN).setParameter(2, email)
+                        .registerStoredProcedureParameter(3, String.class, ParameterMode.IN).setParameter(3, name)
+                        .registerStoredProcedureParameter(4, String.class, ParameterMode.IN).setParameter(4, key)
+                        .registerStoredProcedureParameter(5, String.class, ParameterMode.IN).setParameter(5, espec);
+                query.execute();
+                user = (User) em.createNamedQuery("resetPasswordByLogin").setParameter("login", login).getSingleResult();
+            } catch (Exception ex) {
+                LOGGER.info("Login disponible");
+            }
+        } else {
+            LOGGER.info("Login on use");
+        }
+        return user;
+    }
+    
 }

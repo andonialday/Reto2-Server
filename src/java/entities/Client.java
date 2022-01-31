@@ -5,6 +5,7 @@
  */
 package entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 import static javax.persistence.CascadeType.ALL;
@@ -68,7 +69,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "CLIENT", schema = "reto2g1c")
 @XmlRootElement
-public class Client extends User {
+public class Client extends User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Type type;

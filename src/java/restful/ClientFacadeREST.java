@@ -5,9 +5,13 @@
  */
 package restful;
 
+import cypher.DecryptASim;
+import cypher.Hashing;
 import entities.Client;
 import entities.Commercial;
 import entities.Privilege;
+import entities.User;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -22,14 +26,16 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.logging.Logger;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 import javax.ws.rs.InternalServerErrorException;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * Clase RESTful del cliente con las queries generadas por Hibernate
- * 
+ *
  * @author Jaime San Sebastián
  */
-
 @Stateless
 @Path("entities.client")
 public class ClientFacadeREST extends AbstractFacade<Client> {
@@ -90,49 +96,84 @@ public class ClientFacadeREST extends AbstractFacade<Client> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-    
+
     //Query propia para encontrar el comercial de un cliente
     @GET
     @Path("commercial/{idClient}")
     @Produces({MediaType.APPLICATION_XML})
     public Commercial findClientCommercial(@PathParam("idClient") Integer idClient)
-        throws InternalServerErrorException{
+            throws InternalServerErrorException {
         Commercial commercial = null;
-        try{
+        try {
             LOGGER.info("Finding client commercial");
             commercial = (Commercial) em.createNamedQuery("findClientCommercial")
                     .setParameter("idClient", idClient)
                     .getSingleResult();
-        }catch(Exception e){
+        } catch (Exception e) {
             LOGGER.severe("Error finding client commercial."
-                +e.getLocalizedMessage());
+                    + e.getLocalizedMessage());
             throw new InternalServerErrorException(e);
         }
         return commercial;
     }
-        
+
     //Query propia para eliminar todos los clientes que estén deshabilitados
     @DELETE
     @Path("client/{privilege}")
     @Produces({MediaType.APPLICATION_XML})
     public void deleteAllClientDisabled(@PathParam("privilege") Privilege privilege)
-        throws InternalServerErrorException{
+            throws InternalServerErrorException {
         Client client = null;
-        try{
+        try {
             LOGGER.info("Deleting all clients disabled");
             client = (Client) em.createNamedQuery("deleteAllClientDisabled")
                     .setParameter("privilege", privilege)
                     .getSingleResult();
-        }catch(Exception e){
+        } catch (Exception e) {
             LOGGER.severe("Error deleting all clients disabled."
-                +e.getLocalizedMessage());
+                    + e.getLocalizedMessage());
             throw new InternalServerErrorException(e);
         }
     }
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
+    @GET
+    @Path("signUp/{login}/{email}/{password}/{name}/{tipo}")
+    @Produces({MediaType.APPLICATION_XML})
+    public User signUp(@PathParam("login") String login, @PathParam("email") String email, @PathParam("password") String password, @PathParam("name") String name, @PathParam("tipo") String tipo) throws InternalServerErrorException {
+        User user = null;
+        LOGGER.info("Finding existing user with that login");
+        try {
+            user = (User) em.createNamedQuery("resetPasswordByLogin").setParameter("login", login).getSingleResult();
+        } catch (Exception ex) {
+            LOGGER.info("Login disponible");
+        }
+        if (user == null) {
+            try {
+                byte[] pass = DatatypeConverter.parseHexBinary(password);
+                String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
+                //Hasear la contraseña con MD5
+                String key = DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado));
+                // Añadiendo Cliente mediante procedimiento
+                StoredProcedureQuery query = em.createStoredProcedureQuery("reto2g1c.registerClient")
+                        .registerStoredProcedureParameter(1, String.class, ParameterMode.IN).setParameter(1, login)
+                        .registerStoredProcedureParameter(2, String.class, ParameterMode.IN).setParameter(2, email)
+                        .registerStoredProcedureParameter(3, String.class, ParameterMode.IN).setParameter(3, name)
+                        .registerStoredProcedureParameter(4, String.class, ParameterMode.IN).setParameter(4, key)
+                        .registerStoredProcedureParameter(5, String.class, ParameterMode.IN).setParameter(5, tipo);
+                query.execute();
+                user = (User) em.createNamedQuery("resetPasswordByLogin").setParameter("login", login).getSingleResult();
+            } catch (Exception ex) {
+                LOGGER.info("Login disponible");
+            }
+        } else {
+            LOGGER.info("Login on use");
+        }
+        return user;
+    }
+
 }
