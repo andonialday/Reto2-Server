@@ -10,17 +10,18 @@ import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Jaime San Sebastián y Enaitz Izagirre
+ * Clase dedicada a hashear las contraseñas de usuario para su almacenamiento
+ * en la base de datos
+ * @author Jaime San Sebastián, Enaitz Izagirre y Aitor Perez
  */
 public class Hashing {
     
     private static final Logger LOGGER = Logger.getLogger("package.class");
     /**
-     * Aplica SHA al texto pasado por parámetro
+     * Aplica hasheo mediante SHA al texto pasado por parámetro
      * 
-     * @param texto
-     * @return 
+     * @param texto texto a hashear
+     * @return contraseña haseada
      */
     public static byte[] cifrarTexto(String texto) {
         MessageDigest messageDigest;

@@ -26,8 +26,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
 
 /**
- *
- * @author Jaime San Sebastián, Enaitz Izagirre y Andoni Alday
+ * Clase para descifrar las contraseñas enviadas por la aplicacion cliente
+ * @author Jaime San Sebastián, Enaitz Izagirre, Andoni Alday y Aitor Perez
  */
 public class DecryptASim {
 
@@ -53,6 +53,11 @@ public class DecryptASim {
         return privKey;
     }
 
+    /**
+     * Metodo para desencriptar las contraseñas que llegan desde el cliente
+     * @param cipherText texto cifrado
+     * @return texto descifrado
+     */
     public static byte[] decrypt(byte[] cipherText) {
         byte[] result = null;
         try {

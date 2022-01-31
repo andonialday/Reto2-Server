@@ -9,13 +9,17 @@ import java.security.SecureRandom;
 import java.util.logging.Logger;
 
 /**
- *
+ * Clase para generar nuevas contraseñas tras peticion de usuario
  * @author Jaime San Sebastián, Enaitz Izagirre y Andoni Alday
  */
 public class RandomPasswordGenerator {
 
     private static final Logger LOGGER = Logger.getLogger("package.class");
 
+    /**
+     * Metodo para generar contrasenia aleatoria segura
+     * @return contrasenia aleatoria segura
+     */
     public static String generateRandomKey() {
         LOGGER.info("Generating new password");
         // ASCII range – alphanumeric (0-9, a-z, A-Z)

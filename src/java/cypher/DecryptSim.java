@@ -15,8 +15,8 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- *
- * @author Jaime San Sebastián, Enaitz Izagirre y Andoni Alday
+ * Clase para desencriptar el usuario o la contrasela del correo electronico
+ * @author Jaime San Sebastián, Enaitz Izagirre, Andoni Alday y Aitor Perez
  */
 public class DecryptSim {
 
@@ -25,6 +25,12 @@ public class DecryptSim {
     private static byte[] salt = "esta es la salt!".getBytes();
     private static String key = "rental2g1c";
 
+    /**
+     * Metodo para desencriptar usuario o contraseña del correo 
+     * electronico que usa el servidor cifrado de forma simetrica
+     * @param data usuario o contraseña cifrados
+     * @return usuario o contraseña desfridados
+     */
     public byte[] decryptSim(byte[] data) {
     byte[] decodedMessage = null;
         // Fichero leíd

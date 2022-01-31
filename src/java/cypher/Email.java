@@ -21,8 +21,9 @@ import javax.mail.internet.MimeMultipart;
 import javax.xml.bind.DatatypeConverter;
 
 /**
- *
- * @author Jaime San Sebastián, Enaitz Izagirre y Andoni Alday
+ * Clase para mandar emails de informacion en los procesos que afectan a la 
+ * contraseña del usuario
+ * @author Jaime San Sebastián, Enaitz Izagirre, Andoni Alday y Aitor Perez
  */
 public class Email {
 
@@ -43,6 +44,13 @@ public class Email {
     private static final String text2 = mailConfig.getString("BODY2");
     private static final String cambioPassword = mailConfig.getString("CAMBIOPASSWORD");
 
+    /**
+     * Metodo para mandar la contraseña que se ha generado aleatoria que el servidor
+     * considera segura tras peticion del usuario
+     * @param receiver el email del reptor del mensaje
+     * @param key clave nueva segura generada aleatoriamente
+     * @throws MessagingException en el caso de que se genere un error al mandar un correo
+     */
     public static void sendPasswordReset(String receiver, String key) throws MessagingException {
 
         DecryptSim decrypt = new DecryptSim();
@@ -67,12 +75,7 @@ public class Email {
         props.put("mail.imap.partialfetch", false);
         props.put("mail.smtp.ssl.enable", false);
 
-        // LINEAS COMENTADAS AL DETECTAR FALLOS SI ESTÁN IMPLEMENTADAS
-        // props.put("mail.smtp.user", userF);
-        // props.put("mail.smtp.debug", "true");
-        // props.put("mail.smtp.socketFactory.port", port);
-        // props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        // props.put("mail.smtp.socketFactory.fallback", "false");
+        
         
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
@@ -103,6 +106,11 @@ public class Email {
         LOGGER.info("Mensaje enviandose");
     }
 
+    /**
+     * Metodo que envia un email confirmando que se ha cambiado la contraseña
+     * @param receiver correo del reptor
+     * @throws MessagingException en el caso de que se genere un error al mandar un correo
+     */
     public static void sendPasswordChange(String receiver) throws MessagingException {
 
         DecryptSim decrypt = new DecryptSim();
@@ -127,12 +135,7 @@ public class Email {
         props.put("mail.imap.partialfetch", false);
         props.put("mail.smtp.ssl.enable", false);
 
-        // LINEAS COMENTADAS AL DETECTAR FALLOS SI ESTÁN IMPLEMENTADAS
-        // props.put("mail.smtp.user", userF);
-        // props.put("mail.smtp.debug", "true");
-        // props.put("mail.smtp.socketFactory.port", port);
-        // props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        // props.put("mail.smtp.socketFactory.fallback", "false");
+       
         
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
