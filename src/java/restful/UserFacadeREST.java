@@ -128,10 +128,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
                         LOGGER.info("User enabled");
                         user.add(usr);
                         return user;
+                    } else {
+                        usr = null;
+                        user.add(usr);
+                        return user;
                     }
                 } else {
-                    LOGGER.info("User disabled");
-                    usr = null;
+                    user.add(usr);
+                    return user;
                 }
             }
         } catch (Exception e) {
@@ -198,7 +202,10 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("signUp/{login}/{email}/{password}/{name}")
     @Produces({MediaType.APPLICATION_XML})
-    public User signUp(@PathParam("login") String login, @PathParam("email") String email, @PathParam("password") String password, @PathParam("name") String name) throws InternalServerErrorException {
+    public User signUp(@PathParam("login") String login,
+            @PathParam("email") String email,
+            @PathParam("password") String password,
+            @PathParam("name") String name) throws InternalServerErrorException {
         User user = null;
         LOGGER.info("Finding existing user with that login");
         try {
