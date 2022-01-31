@@ -6,12 +6,11 @@
 package restful;
 
 import cypher.*;
-import entities.Client;
-import entities.Commercial;
 import entities.Privilege;
 import entities.User;
 import entities.UserStatus;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
@@ -108,53 +107,45 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @GET
     @Path("signIn/{login}/{password}")
     @Produces({MediaType.APPLICATION_XML})
-    public User signIn(@PathParam("login") String login, @PathParam("password") String password) throws InternalServerErrorException {
-        User user;
+    public List<User> signIn(@PathParam("login") String login, @PathParam("password") String password) throws InternalServerErrorException {
+        List<User> user = new ArrayList<>();
+        User usr;
         try {
             LOGGER.info("Finding user");
             byte[] pass = DatatypeConverter.parseHexBinary(password);
             String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
             //Hasear la contraseña con MD5
             String key = DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado));
-            user = (User) em.createNamedQuery("signInQuery").setParameter("loginId", login).setParameter("key", key).getSingleResult();
-            if (user != null) {
+            usr = (User) em.createNamedQuery("signInQuery").setParameter("loginId", login).setParameter("key", key).getSingleResult();
+            if (usr != null) {
                 LOGGER.info("User found!!");
-                StoredProcedureQuery query = em.createStoredProcedureQuery("reto2g1c.login").registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN).setParameter(1, user.getId());
+                StoredProcedureQuery query = em.createStoredProcedureQuery("reto2g1c.login").registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN).setParameter(1, usr.getId());
                 LOGGER.info("Initianing post-login procedure");
                 query.execute();
                 //hacer q la contraseña nunca vuelva al cliente llena
-                if (user.getPrivilege() != Privilege.ADMIN) {
-                    if (user.getStatus() == UserStatus.ENABLED) {
+                if (usr.getPrivilege() != Privilege.ADMIN) {
+                    if (usr.getStatus() == UserStatus.ENABLED) {
                         LOGGER.info("User enabled");
-                        if (user instanceof Client) {
-                            LOGGER.info("The User is a client");
-                            User cli = new Client();
-                            cli = user;
-                            return cli;
-                        } else if (user instanceof Commercial) {
-                            LOGGER.info("The User is a commercial");
-                            User com = new Commercial();
-                            com = user;
-                            return com;
-                        }
-                    } else {
-                        LOGGER.info("User disabled");
-                        user = null;
+                        user.add(usr);
+                        return user;
                     }
+                } else {
+                    LOGGER.info("User disabled");
+                    usr = null;
                 }
             }
         } catch (Exception e) {
             LOGGER.severe("Error finding user." + e.getLocalizedMessage());
             throw new InternalServerErrorException(e);
         }
-        // si no esta bn devuelve user vacio / REVISAR 
+        user.add(usr);
         return user;
     }
 
     //Query propia para resetear la contraseña por el login
-    @PUT
+    @GET
     @Path("resetPassword/{log}")
-    @Consumes({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML})
     public void resetPasswordByLogin(@PathParam("log") String log)
             throws InternalServerErrorException {
         String newKey;
@@ -173,7 +164,6 @@ public class UserFacadeREST extends AbstractFacade<User> {
                 Email.sendPasswordReset(user.getEmail(), newKey);
                 //HASH PASSWORD
                 safeKey = DatatypeConverter.printHexBinary(Hashing.cifrarTexto(newKey));
-
                 //UPDATE USER PASSWORD ON DATABASE
                 user.setPassword(safeKey);
                 //super.edit(user);
