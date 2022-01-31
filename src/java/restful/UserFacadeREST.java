@@ -31,6 +31,7 @@ import javax.mail.MessagingException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 import javax.xml.bind.DatatypeConverter;
+import javax.xml.ws.http.HTTPException;
 
 /**
  * Clase RESTful del cliente con las queries generadas por Hibernate
@@ -109,7 +110,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     @Produces({MediaType.APPLICATION_XML})
     public List<User> signIn(@PathParam("login") String login, @PathParam("password") String password) throws InternalServerErrorException {
         List<User> user = new ArrayList<>();
-        User usr;
+        User usr = null;
         try {
             LOGGER.info("Finding user");
             byte[] pass = DatatypeConverter.parseHexBinary(password);
