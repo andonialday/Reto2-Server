@@ -31,7 +31,6 @@ import javax.mail.MessagingException;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 import javax.xml.bind.DatatypeConverter;
-import javax.xml.ws.http.HTTPException;
 
 /**
  * Clase RESTful del cliente con las queries generadas por Hibernate
@@ -62,7 +61,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
     }
 
     @PUT
-    @Path("{id}")
+    @Path("{id}/{password}")
     @Consumes({MediaType.APPLICATION_XML})
     public void edit(@PathParam("id") Integer id, User entity) {
         byte[] pass = DatatypeConverter.parseHexBinary(entity.getPassword());
@@ -180,19 +179,22 @@ public class UserFacadeREST extends AbstractFacade<User> {
     }
 
     @PUT
-    @Path("updatePassword/[user]")
+    @Path("updatePassword/{id}/{password}")
     @Consumes({MediaType.APPLICATION_XML})
-    public void updatePass(@PathParam("user") User user
-    ) {
+    public void updatePass(@PathParam("id") String id, @PathParam("password") String password) {
+        LOGGER.info("Cambiando contraseña");
+        User user;
         try {
-            byte[] key = DatatypeConverter.parseHexBinary(user.getPassword());
-            String descifrado = new String(DecryptASim.decrypt(key), StandardCharsets.UTF_8);
-            user.setPassword(DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado)));
+            user = this.find(Integer.valueOf(id));
+            byte[] pass = DatatypeConverter.parseHexBinary(password);
+            String descifrado = new String(DecryptASim.decrypt(pass), StandardCharsets.UTF_8);
+            String key = DatatypeConverter.printHexBinary(Hashing.cifrarTexto(descifrado));
+            user.setPassword(key);
             Email.sendPasswordChange(user.getEmail());
+            super.edit(user);
         } catch (MessagingException ex) {
             Logger.getLogger(UserFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
-        super.edit(user);
     }
 
     @Override
